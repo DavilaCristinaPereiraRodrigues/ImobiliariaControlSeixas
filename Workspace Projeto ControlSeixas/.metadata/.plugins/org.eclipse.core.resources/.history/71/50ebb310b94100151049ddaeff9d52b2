@@ -1,0 +1,272 @@
+package model;
+
+public class Imovel {
+	
+	private int id_imovel; //autoincrement
+	private int codigo; //Código da tela para podermos fazer o select no ContratoDAO.
+	private String tp_negocio; // 0- locação 1- venda
+	private String tp_pos;
+	private String tp_status ;
+	private String tp_est ;
+	private String tp_pag;
+	private double valor;
+	private String referencias ;
+	private String descricao;
+	private String area_total;
+	private String area_cons;
+	private String area_util;
+	private String qtd_comodos ;
+	private String qtd_quartos;
+	private String vaga_garagem ;
+	private String dt_avaliacao;
+	private String complemento;
+	private int id_cep;
+	private String cpf_prop; //prop
+	
+	
+	
+	
+	public Imovel(int id_imovel, int codigo, String tp_negocio, String tp_pos,
+			String tp_status, String tp_est, String tp_pag, double valor,
+			String referencias, String descricao, String area_total,
+			String area_cons, String area_util, String qtd_comodos,
+			String qtd_quartos, String vaga_garagem, String dt_avaliacao,
+			String complemento, int id_cep, String cpf_prop) {
+		super();
+		this.id_imovel = id_imovel;
+		this.codigo = codigo;
+		this.tp_negocio = tp_negocio;
+		this.tp_pos = tp_pos;
+		this.tp_status = tp_status;
+		this.tp_est = tp_est;
+		this.tp_pag = tp_pag;
+		this.valor = valor;
+		this.referencias = referencias;
+		this.descricao = descricao;
+		this.area_total = area_total;
+		this.area_cons = area_cons;
+		this.area_util = area_util;
+		this.qtd_comodos = qtd_comodos;
+		this.qtd_quartos = qtd_quartos;
+		this.vaga_garagem = vaga_garagem;
+		this.dt_avaliacao = dt_avaliacao;
+		this.complemento = complemento;
+		this.id_cep = id_cep;
+		this.cpf_prop = cpf_prop;
+	}
+	}
+	public int getId_cep() {
+		return id_cep;
+	}
+	public void setId_cep(int id_cep) {
+		this.id_cep = id_cep;
+	}
+	public int getId_imovel() {
+		return id_imovel;
+	}
+	public void setId_imovel(int id_imovel) {
+		this.id_imovel = id_imovel;
+	}
+	public int getCodigo() {
+		return codigo;
+	}
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
+	public String getTp_negocio() {
+		return tp_negocio;
+	}
+	public void setTp_negocio(String tp_negocio) {
+		this.tp_negocio = tp_negocio;
+	}
+	public String getTp_pos() {
+		return tp_pos;
+	}
+	public void setTp_pos(String tp_pos) {
+		this.tp_pos = tp_pos;
+	}
+	public String getTp_status() {
+		return tp_status;
+	}
+	public void setTp_status(String tp_status) {
+		this.tp_status = tp_status;
+	}
+	public String getTp_est() {
+		return tp_est;
+	}
+	public void setTp_est(String tp_est) {
+		this.tp_est = tp_est;
+	}
+	public String getTp_pag() {
+		return tp_pag;
+	}
+	public void setTp_pag(String tp_pag) {
+		this.tp_pag = tp_pag;
+	}
+	public double getValor() {
+		return valor;
+	}
+	public void setValor(double valor) {
+		this.valor = valor;
+	}
+	public String getReferencias() {
+		return referencias;
+	}
+	public void setReferencias(String referencias) {
+		this.referencias = referencias;
+	}
+	public String getDescricao() {
+		return descricao;
+	}
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+	public String getArea_total() {
+		return area_total;
+	}
+	public void setArea_total(String area_total) {
+		this.area_total = area_total;
+	}
+	public String getArea_cons() {
+		return area_cons;
+	}
+	public void setArea_cons(String area_cons) {
+		this.area_cons = area_cons;
+	}
+	public String getArea_util() {
+		return area_util;
+	}
+	public void setArea_util(String area_util) {
+		this.area_util = area_util;
+	}
+	public String getQtd_comodos() {
+		return qtd_comodos;
+	}
+	public void setQtd_comodos(String qtd_comodos) {
+		this.qtd_comodos = qtd_comodos;
+	}
+	public String getQtd_quartos() {
+		return qtd_quartos;
+	}
+	public void setQtd_quartos(String qtd_quartos) {
+		this.qtd_quartos = qtd_quartos;
+	}
+	public String getVaga_garagem() {
+		return vaga_garagem;
+	}
+	public void setVaga_garagem(String vaga_garagem) {
+		this.vaga_garagem = vaga_garagem;
+	}
+	public String getDt_avaliacao() {
+		return dt_avaliacao;
+	}
+	public void setDt_avaliacao(String dt_avaliacao) {
+		this.dt_avaliacao = dt_avaliacao;
+	}
+	public String getComplemento() {
+		return complemento;
+	}
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+	
+	
+	public Imovel(int id_imovel, int codigo, String tp_negocio, String tp_pos,
+			String tp_status, String tp_est, String tp_pag, double valor,
+			String referencias, String descricao, String area_total,
+			String area_cons, String area_util, String qtd_comodos,
+			String qtd_quartos, String vaga_garagem, String dt_avaliacao,
+			String complemento, int id_cep) {
+		super();
+		this.id_imovel = id_imovel;
+		this.codigo = codigo;
+		this.tp_negocio = tp_negocio;
+		this.tp_pos = tp_pos;
+		this.tp_status = tp_status;
+		this.tp_est = tp_est;
+		this.tp_pag = tp_pag;
+		this.valor = valor;
+		this.referencias = referencias;
+		this.descricao = descricao;
+		this.area_total = area_total;
+		this.area_cons = area_cons;
+		this.area_util = area_util;
+		this.qtd_comodos = qtd_comodos;
+		this.qtd_quartos = qtd_quartos;
+		this.vaga_garagem = vaga_garagem;
+		this.dt_avaliacao = dt_avaliacao;
+		this.complemento = complemento;
+		this.id_cep = id_cep;
+	}
+	public Imovel(int id_imovel, int codigo, String tp_negocio, String tp_pos,
+			String tp_status, String tp_est, String tp_pag, double valor,
+			String referencias, String descricao, String area_total,
+			String area_cons, String area_util, String qtd_comodos,
+			String qtd_quartos, String vaga_garagem, String dt_avaliacao,
+			String complemento) {
+		super();
+		this.id_imovel = id_imovel;
+		this.codigo = codigo;
+		this.tp_negocio = tp_negocio;
+		this.tp_pos = tp_pos;
+		this.tp_status = tp_status;
+		this.tp_est = tp_est;
+		this.tp_pag = tp_pag;
+		this.valor = valor;
+		this.referencias = referencias;
+		this.descricao = descricao;
+		this.area_total = area_total;
+		this.area_cons = area_cons;
+		this.area_util = area_util;
+		this.qtd_comodos = qtd_comodos;
+		this.qtd_quartos = qtd_quartos;
+		this.vaga_garagem = vaga_garagem;
+		this.dt_avaliacao = dt_avaliacao;
+		this.complemento = complemento;
+	}
+	public Imovel(int codigo, String tp_negocio, String tp_pos,
+			String tp_status, String tp_est, String tp_pag, double valor,
+			String referencias, String descricao, String area_total,
+			String area_cons, String area_util, String qtd_comodos,
+			String qtd_quartos, String vaga_garagem, String dt_avaliacao,
+			String complemento) {
+		super();
+		this.codigo = codigo;
+		this.tp_negocio = tp_negocio;
+		this.tp_pos = tp_pos;
+		this.tp_status = tp_status;
+		this.tp_est = tp_est;
+		this.tp_pag = tp_pag;
+		this.valor = valor;
+		this.referencias = referencias;
+		this.descricao = descricao;
+		this.area_total = area_total;
+		this.area_cons = area_cons;
+		this.area_util = area_util;
+		this.qtd_comodos = qtd_comodos;
+		this.qtd_quartos = qtd_quartos;
+		this.vaga_garagem = vaga_garagem;
+		this.dt_avaliacao = dt_avaliacao;
+		this.complemento = complemento;
+	}
+	@Override
+	public String toString() {
+		return "Imovel [id_imovel=" + id_imovel + ", codigo=" + codigo
+				+ ", tp_negocio=" + tp_negocio + ", tp_pos=" + tp_pos
+				+ ", tp_status=" + tp_status + ", tp_est=" + tp_est
+				+ ", tp_pag=" + tp_pag + ", valor=" + valor + ", referencias="
+				+ referencias + ", descricao=" + descricao + ", area_total="
+				+ area_total + ", area_cons=" + area_cons + ", area_util="
+				+ area_util + ", qtd_comodos=" + qtd_comodos + ", qtd_quartos="
+				+ qtd_quartos + ", vaga_garagem=" + vaga_garagem
+				+ ", dt_avaliacao=" + dt_avaliacao + ", complemento="
+				+ complemento + "]";
+	}
+	public Imovel() {
+		super();
+	}
+	
+	
+
+
+}// fim da classe

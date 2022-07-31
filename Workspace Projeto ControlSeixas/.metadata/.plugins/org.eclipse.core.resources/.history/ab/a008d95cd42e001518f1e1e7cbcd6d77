@@ -1,0 +1,185 @@
+package model.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import model.Cliente;
+import model.ContratoCompra;
+import util.Conexao;
+import util.Configurador;
+
+public class ContratoCompraDAO {
+	Configurador config = new Configurador();
+	String url;
+	String driver;
+	String login;
+	String senha;
+
+	public ContratoCompraDAO() {
+
+		url = config.getUrl();
+		driver = config.getDriver();
+		login = config.getLogin();
+		senha = config.getSenha();
+
+	}// fim do public bairroDAO
+
+	public static ContratoCompra incluirCompra(int id_contCompra, String dt_aquisicao, double valor,
+			 int tp_pag, int n_parcela, double comissao_cor) {
+		
+		ContratoCompra contCompra = null;
+		ContratoCompraDAO contCompraDAO = new ContratoCompraDAO();
+
+		try {
+			// Criação do insert
+			String sql = "insert into contrato_compra(id_contcompra, dt_aquisicao, valor, tp_pag, n_parcela, comissao_cor, fk_cliente, fk_imovel, fk_corretor, fk_fiador, fk_prop)values"
+					+ "(?,? ,? ,? ,? ,? ,? ,? ,? ,? ,? );"; //Não é autoIncrement
+			//será o n° do contrato do corretor
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(contCompraDAO.url,contCompraDAO.driver,
+					contCompraDAO.login,contCompraDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setInt(1, id_contCompra);
+			comando.setString(2, dt_aquisicao);
+			comando.setDouble(3, valor);
+			comando.setInt(4, tp_pag);
+			comando.setInt(5, n_parcela);
+			comando.setDouble(6, comissao_cor);
+
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		contCompra = new ContratoCompra(id_contCompra , dt_aquisicao, valor, tp_pag, n_parcela, comissao_cor);
+		
+		return contCompra;
+		
+	}// fim do incluirCompra()
+	
+	/*public static ContratoCompra consultarCompra(String login, String senha) { // prepara para o select *
+	
+		ContratoCompra contCompra = null;
+		ContratoCompraDAO contCompraDAO = new ContratoCompraDAO();
+		
+		try {
+			// Criação do select
+			String sql = "select * from usuario u, cliente c "  //termos que ainda faze o select *
+					+ "where u.login=c.fklogin and u.login = ? "
+					+ "and u.senha = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(contCompraDAO.url,contCompraDAO.driver,
+					contCompraDAO.login,contCompraDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1, login);
+			comando.setString(2, senha);
+
+			ResultSet rs = comando.executeQuery();
+
+			if (rs.next()) {
+				contCompra = new ContratoCompra(rs.getInt("id_contCompra"),
+						rs.getString("dt_aquisicao"), rs.getDouble("valor"),
+						rs.getInt("tp_pag"), rs.getInt("n_parcela"),
+						rs.getDouble("comissao_cor"));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return contCompra;
+		
+	}//fim do consultarCompra */
+	
+	public static ContratoCompra excluirCompra(int id_contCompra) {
+		
+		ContratoCompra contCompra = null;
+		ContratoCompraDAO contCompraDAO = new ContratoCompraDAO();
+		
+		try {
+			// Criação do delete
+			String sql = "delete from contratoCompra where id_contCompra = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(contCompraDAO.url,contCompraDAO.driver,
+					contCompraDAO.login,contCompraDAO.senha);
+
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setInt(1,id_contCompra );
+
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return contCompra;
+	}// fim do excluirCompra();
+	
+	public static ContratoCompra alterarCompra( 
+			int id_contCompra, String dt_aquisicao,
+			double valor, int tp_pag, int n_parcela, double comissao_cor) {
+		//aqui coloquei p/ alterar pelo id pois ñ tinha oltra indentificação única
+		
+		ContratoCompra contCompra = null;
+		ContratoCompraDAO contCompraDAO = new ContratoCompraDAO();
+
+		try {
+			// Criação do update
+			String sql = "update contratoCompra set dt_aquisicao = ?, valor = ?, tp_pag = ?," +
+				"n_parcelas = ? , comissao_cor = ? where id_contCompra = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(contCompraDAO.url,contCompraDAO.driver,
+					contCompraDAO.login,contCompraDAO.senha);
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+			comando.setString(1, dt_aquisicao);
+			comando.setDouble(2, valor);
+			comando.setInt(3, tp_pag);
+			comando.setInt(4, n_parcela);
+			comando.setDouble(5, comissao_cor);
+			comando.setInt(6, id_contCompra);
+			
+			// Comando executado
+			
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return contCompra;
+	}// fim do alterarCompra();
+}

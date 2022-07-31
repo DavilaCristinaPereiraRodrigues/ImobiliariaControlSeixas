@@ -1,0 +1,193 @@
+package model;
+
+import model.DAO.CorretorDAO;
+
+public class Corretor {
+public Corretor(int id_corretor, String cpf_corretor, String nome) {
+		super();
+		this.id_corretor = id_corretor;
+		this.cpf_corretor = cpf_corretor;
+		this.nome = nome;
+	}
+
+private int id_corretor;
+private String creci;
+private String cpf_corretor; //unique
+private String nome;
+private String telefone;
+private String email;
+private String login;
+private String senha;
+private String tp_cor;
+private String complemento;
+private int id_cep;
+
+
+public int getId_cep() {
+	return id_cep;
+}
+
+public void setId_cep(int id_cep) {
+	this.id_cep = id_cep;
+}
+
+public int getId_corretor() {
+	return id_corretor;
+}
+
+public void setId_corretor(int id_corretor) {
+	this.id_corretor = id_corretor;
+}
+
+public String getCreci() {
+	return creci;
+}
+
+public void setCreci(String creci) {
+	this.creci = creci;
+}
+
+public String getCpf_corretor() {
+	return cpf_corretor;
+}
+
+public void setCpf_corretor(String cpf_corretor) {
+	this.cpf_corretor = cpf_corretor;
+}
+
+public String getNome() {
+	return nome;
+}
+
+public void setNome(String nome) {
+	this.nome = nome;
+}
+
+public String getTelefone() {
+	return telefone;
+}
+
+public void setTelefone(String telefone) {
+	this.telefone = telefone;
+}
+
+public String getEmail() {
+	return email;
+}
+
+public void setEmail(String email) {
+	this.email = email;
+}
+
+public String getLogin() {
+	return login;
+}
+
+public void setLogin(String login) {
+	this.login = login;
+}
+
+public String getSenha() {
+	return senha;
+}
+
+public void setSenha(String senha) {
+	this.senha = senha;
+}
+
+public String getTp_cor() {
+	return tp_cor;
+}
+
+public void setTp_cor(String tp_cor) {
+	this.tp_cor = tp_cor;
+}
+
+public String getComplemento() {
+	return complemento;
+}
+
+public void setComplemento(String complemento) {
+	this.complemento = complemento;
+}
+
+@Override
+public String toString() {
+	final String ENTER = "\n";
+	
+	return "CRECI - " + creci + ENTER
+			+ "CPF - " + cpf_corretor + ENTER + "Nome - " + nome + ENTER
+			+ "Telefone - " + telefone + ENTER + "E-mail - " + email + ENTER;
+
+}
+
+public Corretor() {
+	super();
+}
+
+public Corretor(String creci, String cpf_corretor, String nome,
+		String telefone, String email, String login, String senha,
+		String tp_cor, String complemento) {
+	super();
+	this.creci = creci;
+	this.cpf_corretor = cpf_corretor;
+	this.nome = nome;
+	this.telefone = telefone;
+	this.email = email;
+	this.login = login;
+	this.senha = senha;
+	this.tp_cor = tp_cor;
+	this.complemento = complemento;
+}
+
+public Corretor(int id_corretor, String creci, String cpf_corretor,
+		String nome, String telefone, String email, String login, String senha,
+		String tp_cor, String complemento) {
+	super();
+	this.id_corretor = id_corretor;
+	this.creci = creci;
+	this.cpf_corretor = cpf_corretor;
+	this.nome = nome;
+	this.telefone = telefone;
+	this.email = email;
+	this.login = login;
+	this.senha = senha;
+	this.tp_cor = tp_cor;
+	this.complemento = complemento;
+}
+
+
+
+
+//construtor com o id do cep
+public Corretor(int id_corretor, String creci, String cpf_corretor,
+		String nome, String telefone, String email, String login, String senha,
+		String tp_cor, String complemento, int id_cep) {
+	super();
+	this.id_corretor = id_corretor;
+	this.creci = creci;
+	this.cpf_corretor = cpf_corretor;
+	this.nome = nome;
+	this.telefone = telefone;
+	this.email = email;
+	this.login = login;
+	this.senha = senha;
+	this.tp_cor = tp_cor;
+	this.complemento = complemento;
+	this.id_cep = id_cep;
+}
+
+//Verificar se o corretor está logado
+
+
+public boolean validarLogin (String login, String senha, String tp_cor){
+	Corretor corretor = CorretorDAO.buscarPorLoginSenha(login, senha, tp_cor);
+	if (corretor != null){
+		return true;
+	}
+	return false;
+}
+
+
+
+}// fim da classe

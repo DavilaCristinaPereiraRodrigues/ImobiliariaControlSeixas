@@ -1,0 +1,300 @@
+package view;
+
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.List;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+import util.ImovelTabelaModel;
+import model.Endereco;
+import model.Imovel;
+import view.JanelaImovel;
+import model.Proprietario;
+import model.DAO.EnderecoDAO;
+import model.DAO.ImovelDAO;
+import model.DAO.ProprietarioDAO;
+
+public class PesquisarImovel extends JFrame {
+
+
+
+	private JTextField txtValorMin;
+	private JTextField txtValormax;
+	private JTextField txtCidade;
+	private JTextField txtBairro;
+	//private JTable table;
+
+	private JTable tabela;
+
+
+	public static void main(String[] args) {
+
+		try {
+			new PesquisarImovel();
+			//	frame.setVisible(true);
+			//frame.setResizable(false); 
+			//frame.setLocationRelativeTo(null);//Centraliza a janela na tela
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public PesquisarImovel() {
+		super("Pesquisar Imóvel");
+
+		// constrói a tabela  
+		tabela = new JTable();
+		
+
+		tabela.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+			//Para clicar na tabela
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+
+				if(arg0.getButton()==MouseEvent.BUTTON1){
+					String retorno = "";
+					for (int i = 0; i < tabela.getColumnCount(); i++) {
+						retorno = retorno+tabela.getColumnName(i)+": "+tabela.getValueAt(tabela.getSelectedRow(), i)+"\n";
+					}
+					//int codigo = (int) tabela.getValueAt(tabela.getSelectedRow(), 0);
+					//new JanelaImovel(codigo);
+					JOptionPane.showMessageDialog(tabela.getParent(), retorno);
+				}
+			}
+		});
+
+		
+		
+		
+		
+		JPanel painelDaTabela = new JPanel();
+		
+		JScrollPane scrollPane = new JScrollPane();  
+		scrollPane.getViewport().add(tabela);
+		scrollPane.setLocation(22,371);  
+		scrollPane.setSize(744,190);  
+		//getContentPane().add(scrollPane);
+		painelDaTabela.add(scrollPane);
+		painelDaTabela.setBounds(323, 350, 417, 215);
+		//btnPesquisar.setBounds(323, 287, 134, 31);
+		getContentPane().add(painelDaTabela);
+
+
+
+		//Cor do menu para colocar azul, o plano de fundo
+		getContentPane().setBackground(new Color(135, 206, 250)); 
+		getContentPane().setFont(new Font("Calibri", Font.PLAIN, 14));
+
+		setTitle("Pesquisar Imóvel");
+		//aqui e DISPOSE_ON_CLOSE para sair so da classe sem sai do menu
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 0,800, 600);
+		getContentPane().setLayout(null);
+
+		JLabel lblValorMnimo = new JLabel("Valor M\u00EDnimo");
+		lblValorMnimo.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblValorMnimo.setBounds(353, 42, 119, 14);
+		getContentPane().add(lblValorMnimo);
+
+		JLabel lblValorMximo = new JLabel("Valor M\u00E1ximo");
+		lblValorMximo.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblValorMximo.setBounds(482, 42, 135, 14);
+		getContentPane().add(lblValorMximo);
+
+		JLabel lblCidade = new JLabel("Cidade");
+		lblCidade.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblCidade.setBounds(353, 154, 119, 14);
+		getContentPane().add(lblCidade);
+
+		txtCidade = new JTextField();
+		txtCidade.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtCidade.setColumns(10);
+		txtCidade.setBounds(353, 179, 233, 20);
+		getContentPane().add(txtCidade);
+		// Para não editar o Cidade, que virá do Banco
+
+
+
+		JLabel lblBairro = new JLabel("Bairro");
+		lblBairro.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblBairro.setBounds(353, 98, 46, 14);
+		getContentPane().add(lblBairro);
+
+		txtBairro = new JTextField();
+		txtBairro.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtBairro.setColumns(10);
+		txtBairro.setBounds(353, 123, 233, 20);
+		getContentPane().add(txtBairro);
+		// Para não editar o Bairro, que virá do Banco
+
+
+
+
+		JLabel lblStatus = new JLabel("Status");
+		lblStatus.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblStatus.setBounds(353, 210, 46, 14);
+		getContentPane().add(lblStatus);
+
+		txtValorMin = new JTextField();
+		txtValorMin.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtValorMin.setBounds(353, 67, 103, 20);
+		getContentPane().add(txtValorMin);
+		txtValorMin.setColumns(10);
+
+		txtValormax = new JTextField();
+		txtValormax.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtValormax.setBounds(483, 67, 103, 20);
+		getContentPane().add(txtValormax);
+		txtValormax.setColumns(10);
+
+
+		JComboBox cbStatus = new JComboBox(new Object[]{"Livre","Alugado","Vendido"});
+		cbStatus.setFont(new Font("Calibri", Font.PLAIN, 18));
+		cbStatus.setBounds(353, 235, 134, 20);
+		getContentPane().add(cbStatus);
+
+
+
+		JButton btnPesquisar = new JButton("Pesquisar");
+		btnPesquisar.setIcon(new ImageIcon("img\\magnifier13.png"));
+		btnPesquisar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				//double valorMin = Double.parseDouble(txtValorMin.toString());
+				double valorMin = Double.parseDouble(txtValorMin.getText());
+				double valorMax = Double.parseDouble(txtValormax.getText());
+				String tp_status = (String) cbStatus.getSelectedItem();
+				String bairro = txtBairro.getText();
+				String cidade = txtCidade.getText();
+
+				System.out.println("valorMin="+valorMin +" valorMax=" +valorMax + " tp_status="+tp_status + " bairro="+bairro + " cidade="+cidade);
+
+				List<Imovel> imovel = ImovelDAO.PesquisarImovel(valorMin, valorMax, bairro, cidade, tp_status);
+				List<Endereco> enderecos = EnderecoDAO.PesquisarEndereco(valorMin, valorMax, bairro, cidade, tp_status);
+				/*
+				if(imovel==null){
+					System.out.println("imóvel == null");
+				}else{
+					System.out.println(imovel.get(0).getCodigo());
+				}
+				
+				if(enderecos==null){
+					System.out.println("enderecos == null");
+				}else{
+					System.out.println(enderecos.get(0).getBairro());
+				}
+				*/
+				//chamar a classe com JTable passando os 2 obj List
+				//JPanel painelDaTabela = new JPanel();
+				ImovelTabelaModel tableModel = new ImovelTabelaModel(imovel, enderecos);
+				tabela.setModel(tableModel);
+				
+				/*
+				String[] colunas = {"Col1","Col2","Col3"};
+				String [][] dados = new String[2][3];
+				dados[0][0]="0,0";
+				dados[0][1]="0,1";
+				dados[0][2]="0,2";
+				dados[1][0]="1,0";
+				dados[1][1]="1,1";
+				dados[1][2]="1,2";
+				DefaultTableModel aux = new DefaultTableModel(dados,colunas);
+				tabela.setModel(aux);
+				repaint();
+				*/
+				
+				/*
+			            JScrollPane scrollPane = new JScrollPane();  
+			            scrollPane.getViewport().add(tabela);
+			            scrollPane.setLocation(22,371);  
+			            scrollPane.setSize(744,190);  
+			            //getContentPane().add(scrollPane);
+			            painelDaTabela.add(scrollPane);
+						painelDaTabela.setBounds(323, 300, 217, 215);
+						//btnPesquisar.setBounds(323, 287, 134, 31);
+						getContentPane().add(painelDaTabela);
+
+				 */					
+			}//fim do pesquisa imovel
+
+		});
+
+
+		btnPesquisar.setFont(new Font("Calibri", Font.PLAIN, 14));
+		btnPesquisar.setBounds(323, 287, 134, 31);
+		getContentPane().add(btnPesquisar);
+
+		JLabel lblA = new JLabel("a");
+		lblA.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblA.setBounds(466, 67, 21, 14);
+		getContentPane().add(lblA);
+
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon("img\\PesquisaImovel.png"));
+		lblNewLabel.setBounds(36, 85, 200, 137);
+		getContentPane().add(lblNewLabel);
+
+		JLabel lblPesquisarImoveis = new JLabel("Pesquisar Imov\u00E9is");
+		lblPesquisarImoveis.setFont(new Font("Calibri", Font.BOLD, 21));
+		lblPesquisarImoveis.setBounds(57, 235, 160, 14);
+		getContentPane().add(lblPesquisarImoveis);
+
+
+
+
+
+
+
+		//imagem de fundo
+		JLabel lblImagem = new JLabel("imagem");
+		lblImagem.setFont(new Font("Calibri", Font.PLAIN, 14));
+		lblImagem.setIcon(new ImageIcon("img\\1 (1).png"));
+		lblImagem.setBounds(0, 0, 1024, 728);
+		getContentPane().add(lblImagem);
+
+
+
+		setResizable(false);// Fazer que a tela não redimensione
+		setLocationRelativeTo(null);// Fazer que a tela abra no centro
+		setVisible(true);
+	}
+}

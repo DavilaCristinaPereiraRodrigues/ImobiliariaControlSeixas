@@ -1,0 +1,71 @@
+package view;
+
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+public class Login1{
+
+	public Login1(){
+		
+		JLabel labelUsuario = new JLabel("Usuário: ");
+		JLabel labelSenha = new JLabel("Senha:   ");
+		JTextField textUsuario = new JTextField(20);
+		JPasswordField passSenha = new JPasswordField(20);
+		
+		
+		JButton botaoLogIn = new JButton("LogIn");
+		
+		
+		JFrame janelaLogIn = new JFrame("Janela de LogIn");
+		JPanel painelLogIn = (JPanel) janelaLogIn.getContentPane();
+		painelLogIn.setLayout(new FlowLayout());
+		painelLogIn.add(labelUsuario);
+		painelLogIn.add(textUsuario);
+		painelLogIn.add(labelSenha);
+		painelLogIn.add(passSenha);
+		painelLogIn.add(botaoLogIn);
+
+		janelaLogIn.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		janelaLogIn.setSize(300, 150);
+		janelaLogIn.setVisible(true);
+
+		JFrame janelaPrincipal = new JFrame("Janela Principal");
+		janelaPrincipal.getContentPane().add(new JLabel("Logado..."));
+		janelaPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		janelaPrincipal.setSize(500, 300);
+
+		botaoLogIn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				if(textUsuario.getText().equals("admin") && new String(passSenha.getPassword()).equals("1234")){
+					janelaLogIn.dispose();
+					janelaPrincipal.setVisible(true);
+				}else{
+					//JOptionPane.showMessageDialog(((JButton)arg0.getSource()).getParent(), "Login ou senha inválido.", "Erro", JOptionPane.ERROR_MESSAGE);//Este funciona sem precisar conhecer a referencia do continer/janela do componente que dispara o action
+					JOptionPane.showMessageDialog(janelaLogIn, "Login ou senha inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+					textUsuario.setText("");
+					passSenha.setText("");
+				}
+			}
+		});
+
+	}
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new Login1();
+	}
+
+}

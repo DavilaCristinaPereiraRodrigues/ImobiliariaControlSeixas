@@ -1,0 +1,309 @@
+package model.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Proprietario;
+import util.Conexao;
+import util.Configurador;
+
+public class ProprietarioDAO {
+	Configurador config = new Configurador();
+
+	String url;
+	String driver;
+	String login;
+	String senha;
+
+	public ProprietarioDAO() {
+
+		url = config.getUrl();
+		driver = config.getDriver();
+		login = config.getLogin();
+		senha = config.getSenha();
+
+	}// fim do public proprietarioDAO
+
+	public static Proprietario incluirProprietario(String cpf_prop,
+			String nome, String telefone, String email, String estado_civil,
+			String profissao, String complemento, String cep) { // não coloquei
+																// p/ inserir o
+																// id pois será
+																// auto_increment
+		// id refere-se a endereco
+
+		Proprietario proprietario = null;
+		ProprietarioDAO propDAO = new ProprietarioDAO();
+
+		try {
+			// Criação do insert
+			String sql = "insert into proprietario(id_prop, cpf_prop, nome,  telefone, email, estado_civil, profissao, complemento, fk_id)values"
+					+ "(null, ?, ?, ?, ? , ?, ?, ? , (select id from base_cep where cep = ?))";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(propDAO.url, propDAO.driver,
+					propDAO.login, propDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1, cpf_prop);
+			comando.setString(2, nome);
+			comando.setString(3, telefone);
+			comando.setString(4, email);
+			comando.setString(5, estado_civil);
+			comando.setString(6, profissao);
+			comando.setString(7, complemento);
+			comando.setString(8, cep);
+
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		proprietario = new Proprietario(cpf_prop, nome, telefone, email,
+				estado_civil, profissao, complemento);
+
+		return proprietario;
+
+	}// fim do incluirProprietario
+
+	public static Proprietario excluirProprietario(String cpf_prop) { // excluir
+																		// pelo
+																		// cpf_prop
+
+		Proprietario proprietario = null;
+		ProprietarioDAO propDAO = new ProprietarioDAO();
+
+		try {
+		String sql = "insert into morto_proprietario (select id_prop, cpf_prop, nome, telefone,email, estado_civil, profissao, complemento, fk_id"
+				+ " from proprietario where cpf_prop = ?)";
+				
+		// Criação do delete
+		String sql1 = "delete from proprietario where cpf_prop = ?";
+
+		// Obter a conexão com o BD
+		Conexao conex = new Conexao(propDAO.url, propDAO.driver,
+				propDAO.login, propDAO.senha);
+
+		// Abrir a conexao
+		Connection con = conex.obterConexao();
+		Connection con1 = conex.obterConexao();
+
+		// Preparar o comando para ser executado
+		PreparedStatement comando = con.prepareStatement(sql);
+		PreparedStatement comando1 = con1.prepareStatement(sql1);
+		
+		comando.setString(1, cpf_prop);
+		comando1.setString(1, cpf_prop);
+		
+		// Comando executado
+		comando.executeUpdate();
+		comando1.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return proprietario;
+	}// fim do excluirProprietario();
+
+	public static Proprietario alterarProprietario(String cpf_prop,
+			String nome, String telefone, String email, String estado_civil,
+			String profissao, String complemento, String cep) { // não coloquei
+																// p/ alterar o
+																// id pois será
+																// auto_increment
+
+		Proprietario proprietario = null;
+		ProprietarioDAO propDAO = new ProprietarioDAO();
+
+		try {
+			// Criação do update
+			String sql = "update proprietario set cpf_prop = ?, nome = ?, telefone = ?,"
+					+ "email = ? , estado_civil = ?, profissao = ?, complemento = ? , fk_id = (select id from"
+					+ " base_cep where cep = ? ), where cpf_prop = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(propDAO.url, propDAO.driver,
+					propDAO.login, propDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1, cpf_prop);
+			comando.setString(2, nome);
+			comando.setString(3, telefone);
+			comando.setString(4, email);
+			comando.setString(5, estado_civil);
+			comando.setString(6, profissao);
+			comando.setString(7, complemento);
+			comando.setString(8, cep);
+			comando.setString(9, cpf_prop);
+			
+			// Comando executado
+
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return proprietario;
+	}// fim do alterarProprietario();
+
+	// Tela pra pesquisar o Proprietário
+
+	
+	public static List<Proprietario> buscarProprietario(String cpf_prop,
+			String nome) {
+
+		List<Proprietario> proprietario = null;
+
+		ProprietarioDAO propDAO = new ProprietarioDAO();
+		try {
+			// Criação do select
+
+			// PESQUISAR PELO NOME e seu Id
+
+			String sql = "select * from proprietario where (cpf_prop = ? or nome = ?)";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(propDAO.url, propDAO.driver,
+					propDAO.login, propDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1, cpf_prop);
+			comando.setString(2, nome);
+
+			ResultSet rs = comando.executeQuery();
+
+			proprietario = new ArrayList<Proprietario>();
+
+			while (rs.next()) {
+				proprietario.add(new Proprietario(rs.getInt("id_prop"), rs
+						.getString("cpf_prop"), rs.getString("nome"), rs
+						.getString("telefone"), rs.getString("email"), rs
+						.getString("estado_civil"), rs.getString("profissao"),
+						rs.getString("complemento")));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return proprietario;
+	} // fim do buscarProprietario
+
+
+	public static Proprietario buscarProprietarioCPF_PROP(String cpf_prop) {
+
+		Proprietario proprietario = null;
+
+		ProprietarioDAO propDAO = new ProprietarioDAO();
+		try {
+			// Criação do select
+
+			// PESQUISAR PELO NOME e seu Id
+
+			String sql = "select * from proprietario where cpf_prop = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(propDAO.url, propDAO.driver,
+					propDAO.login, propDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1, cpf_prop);
+
+			ResultSet rs = comando.executeQuery();
+
+			if (rs.next()) {
+				proprietario = new Proprietario(rs.getInt("id_prop"), rs.getString("cpf_prop"), rs.getString("nome"), rs
+						.getString("telefone"), rs.getString("email"), rs
+						.getString("estado_civil"), rs.getString("profissao"),
+						rs.getString("complemento"), rs.getInt("fk_id"));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return proprietario;
+	} // fim do buscarProprietarioCEP
+	
+	
+	public static Proprietario buscarProprietariofkProp(int fk_prop) {
+
+		Proprietario proprietario = null;
+
+		ProprietarioDAO propDAO = new ProprietarioDAO();
+		try {
+			// Criação do select
+
+			// PESQUISAR PELO NOME e seu Id
+
+			String sql = "select * from proprietario where id_prop = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(propDAO.url, propDAO.driver,
+					propDAO.login, propDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1, cpf_prop);
+
+			ResultSet rs = comando.executeQuery();
+
+			if (rs.next()) {
+				proprietario = new Proprietario(rs.getInt("id_prop"), rs.getString("cpf_prop"), rs.getString("nome"), rs
+						.getString("telefone"), rs.getString("email"), rs
+						.getString("estado_civil"), rs.getString("profissao"),
+						rs.getString("complemento"), rs.getInt("fk_id"));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return proprietario;
+	} // fim do buscarProprietarioCEP
+	
+	}// fim da classe
+

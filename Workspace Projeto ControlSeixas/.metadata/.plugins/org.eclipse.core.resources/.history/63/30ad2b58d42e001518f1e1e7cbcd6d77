@@ -1,0 +1,142 @@
+package model.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import model.Proprietario;
+import util.Conexao;
+import util.Configurador;
+
+public class ProprietarioDAO {
+	Configurador config = new Configurador();
+
+	String url;
+	String driver;
+	String login;
+	String senha;
+
+	public ProprietarioDAO() {
+
+		url = config.getUrl();
+		driver = config.getDriver();
+		login = config.getLogin();
+		senha = config.getSenha();
+		
+	}//fim do public proprietarioDAO
+	
+	public static Proprietario incluirProprietario(String cpf, String nome, String telefone, String email, String estado_civil, String profissao ) { //não coloquei p/ inserir o id pois será auto_increment
+		
+		Proprietario proprietario = null;
+		ProprietarioDAO propDAO = new ProprietarioDAO();
+
+		try {
+			// Criação do insert
+			String sql ="insert into proprietario(id_prop, cpf, nome, email, telefone, estado_civil, profissao, fk_endereco)values"
+					+ "(null, ?, ?, ?, ? , ?, ?, ?);";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(propDAO.url, propDAO.driver,
+					propDAO.login, propDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+		
+			comando.setString(1, cpf);
+			comando.setString(2, nome);
+			comando.setString(3, telefone);
+			comando.setString(4, email);
+			comando.setString(5, estado_civil);
+			comando.setString(6, profissao);
+	
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		proprietario = new Proprietario (cpf, nome, telefone, email, estado_civil, profissao);
+		
+		return proprietario;
+		
+	}//fim do incluirProprietario
+	
+	public static Proprietario excluirProprietario(String cpf) { //excluir pelo cpf
+
+		Proprietario proprietario = null;
+		ProprietarioDAO propDAO = new ProprietarioDAO();
+
+		try {
+			// Criação do delete
+			String sql = "delete from proprietario where cpf = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(propDAO.url, propDAO.driver,
+					propDAO.login, propDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1,cpf);
+
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return proprietario;
+	}// fim do excluirProprietario();
+	
+	public static Proprietario alterarProprietario(String cpf, String nome,
+			String telefone, String email, String estado_civil, String profissao ) { //não coloquei p/ alterar o id pois será auto_increment
+		
+		Proprietario proprietario = null;
+		ProprietarioDAO propDAO = new ProprietarioDAO();
+
+		try {
+			// Criação do update
+			String sql = "update proprietario set cpf = ?, nome = ?, telefone = ?," +
+				"email = ? , estado_civil = ?, profissao = ? where cpf = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(propDAO.url,propDAO.driver,
+					propDAO.login, propDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+			
+			comando.setString(1, cpf);
+			comando.setString(2, nome);
+			comando.setString(3, telefone);
+			comando.setString(4, email);
+			comando.setString(5, estado_civil);
+			comando.setString(6, profissao);
+		
+			
+			// Comando executado
+			
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return proprietario;
+	}// fim do alterarProprietario();
+	
+	
+	
+}// fim da classe
+

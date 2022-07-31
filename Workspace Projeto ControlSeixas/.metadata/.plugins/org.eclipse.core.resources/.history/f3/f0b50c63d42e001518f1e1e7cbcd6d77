@@ -1,0 +1,105 @@
+package model.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import model.Bairro;
+import util.Conexao;
+import util.Configurador;
+
+public class BairroDAO {
+	Configurador config = new Configurador();
+	String url;
+	String driver;
+	String login;
+	String senha;
+
+	public BairroDAO() {
+
+		url = config.getUrl();
+		driver = config.getDriver();
+		login = config.getLogin();
+		senha = config.getSenha();
+		
+	}//fim do public bairroDAO
+	
+	
+	public static Bairro incluirBairro(int id_bairro) { 
+					
+					Bairro bairro = null;
+					BairroDAO bairroDAO = new BairroDAO();
+
+					try {
+						// Criação do insert
+						String sql ="INSERT INTO bairro (id_bairro,fk_cidade,nome_bairro) VALUES (?,?,?);";
+
+						// Obter a conexão com o BD
+						Conexao conex = new Conexao(bairroDAO.url, bairroDAO.driver,
+								bairroDAO.login,bairroDAO.senha);
+
+						// Abrir a conexao
+						Connection con = conex.obterConexao();
+
+						// Preparar o comando para ser executado
+						PreparedStatement comando = con.prepareStatement(sql);
+
+					
+						comando.setInt(1, id_bairro);
+				
+
+				
+
+						// Comando executado
+						comando.executeUpdate();
+
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
+
+					bairro = new Bairro (id_bairro);
+					return bairro;
+				}// fim do incluirBairro()
+	
+	public static Bairro consultarBairro(String login, String senha) { // prepara para o select *
+		Bairro bairro = null;
+
+		BairroDAO bairroDAO = new BairroDAO();
+		try {
+			// Criação do select
+			String sql = "select * from usuario u, cliente c " //termos que ainda faze o select *
+					+ "where u.login=c.fklogin and u.login = ? "
+					+ "and u.senha = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(bairroDAO.url, bairroDAO.driver,
+					bairroDAO.login,bairroDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1, login);
+			comando.setString(2, senha);
+
+			ResultSet rs = comando.executeQuery();
+
+			if (rs.next()) {
+				bairro = new Bairro(rs.getInt("id_bairro"),
+						rs.getString("nome"));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return bairro;
+	}//fim do consultarbairro
+	
+}

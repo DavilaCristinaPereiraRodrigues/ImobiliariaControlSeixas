@@ -1,0 +1,136 @@
+package model.DAO;
+
+import model.Endereco;
+import util.Conexao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import util.Conexao;
+import util.Configurador;
+
+	public class EnderecoDAO {
+
+		
+		Configurador config = new Configurador();
+
+		String url;
+		String driver;
+		String login;
+		String senha;
+
+		public EnderecoDAO() {
+
+			url = config.getUrl();
+			driver = config.getDriver();
+			login = config.getLogin();
+			senha = config.getSenha();
+			
+		}//fim do public endereço
+		
+		public static Endereco inserirEndereco( String logradouro, String numero,  String cep) {
+			
+			Endereco endereco = null;
+			EnderecoDAO endDAO = new EnderecoDAO();
+
+			try {
+				// Criação do insert
+				String sql ="insert into endereco(id_endereco , logradouro, numero, cep, fk_bairro)values"
+						+ "(null, ?, ?, ?, ?);";
+
+				// Obter a conexão com o BD
+				Conexao conex = new Conexao(endDAO.url, endDAO.driver,
+						endDAO.login,endDAO.senha);
+
+				// Abrir a conexao
+				Connection con = conex.obterConexao();
+
+				// Preparar o comando para ser executado
+				PreparedStatement comando = con.prepareStatement(sql);
+			
+				comando.setString(1, logradouro);
+				comando.setString(2, numero);
+				comando.setString(3, cep);
+	
+				// Comando executado
+				comando.executeUpdate();
+
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+
+			endereco = new Endereco(logradouro, numero, cep);
+			
+			return endereco;
+		}
+		
+		
+		public static Endereco excluirEndereco (int id_endereco) {
+		
+			Endereco endereco = null;
+			EnderecoDAO endDAO = new EnderecoDAO();
+
+
+			try {
+				// Criação do delete
+				String sql = "delete from endereco where id_endereco = ?";
+
+				// Obter a conexão com o BD
+				Conexao conex = new Conexao(endDAO.url, endDAO.driver,
+						endDAO.login, endDAO.senha);
+
+				// Abrir a conexao
+				Connection con = conex.obterConexao();
+
+				// Preparar o comando para ser executado
+				PreparedStatement comando = con.prepareStatement(sql);
+
+				comando.setInt(1, id_endereco);
+
+				// Comando executado
+				comando.executeUpdate();
+
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+
+			return endereco;
+		}// fim do excluirEndereco();
+		
+		
+		public static Endereco alterarEndereco(String logradouro, String numero,  String cep) { //não coloquei p/ alterar o id pois será auto_increment
+			
+			Endereco endereco = null;
+			EnderecoDAO endDAO = new EnderecoDAO();
+
+			try {
+				// Criação do update
+				String sql = "update endereco set logradouro = ?, numero = ?, cep = ? ";
+
+				// Obter a conexão com o BD
+				Conexao conex = new Conexao(endDAO.url, endDAO.driver,
+						endDAO.login,endDAO.senha);
+
+				// Abrir a conexao
+				Connection con = conex.obterConexao();
+
+				// Preparar o comando para ser executado
+				PreparedStatement comando = con.prepareStatement(sql);
+				
+				comando.setString(1, logradouro);
+				comando.setString(2, numero);
+				comando.setString(3, cep);
+			
+				// Comando executado
+				
+				comando.executeUpdate();
+
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+
+			return endereco;
+		}// fim do alterarEndereco();
+		
+}// fim da classe

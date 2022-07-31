@@ -1,0 +1,187 @@
+package model.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import model.Fiador;
+import util.Conexao;
+import util.Configurador;
+
+public class FiadorDAO {
+
+	Configurador config = new Configurador();
+
+	String url;
+	String driver;
+	String login;
+	String senha;
+
+	public FiadorDAO() {
+
+		url = config.getUrl();
+		driver = config.getDriver();
+		login = config.getLogin();
+		senha = config.getSenha();
+
+	}// fim do fiadorDAO
+
+	public static Fiador incluirFiador(	String cpf, String nome, String telefone, String email,
+			String profissao) {
+
+		Fiador fiador = null;
+		FiadorDAO fiaDAO = new FiadorDAO();
+
+		try {
+			// Criação do insert
+			String sql = "insert into fiador(id_fiador, cpf, nome, telefone, email, profissao, fk_endereco)values"
+					+ "(null,?,?,?,?,?,?);";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(fiaDAO.url, fiaDAO.driver,
+					fiaDAO.login, fiaDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+			//comando.setInt(1, id_fiador);
+			comando.setString(1, cpf);
+			comando.setString(2, nome);
+			comando.setString(3, telefone);
+			comando.setString(4, email);
+			comando.setString(5, profissao);
+	
+
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		fiador = new Fiador(cpf, nome, telefone, email, profissao);
+
+		return fiador;
+	}// fim do incluirfiador
+	
+	/*
+	public static Fiador consultarFiador(String login, String senha) { // prepara para o select *
+		Fiador fiador = null;
+		FiadorDAO fiaDAO = new FiadorDAO();
+		
+		try {
+			// Criação do select
+			String sql = "select * from usuario u, cliente c "    //termos que ainda faze o select *
+					+ "where u.login=c.fklogin and u.login = ? "
+					+ "and u.senha = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(fiaDAO.url, fiaDAO.driver,
+					fiaDAO.login, fiaDAO.senha);
+
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1, login);
+			comando.setString(2, senha);
+
+			ResultSet rs = comando.executeQuery();
+
+			if (rs.next()) {
+				fiador = new Fiador(rs.getInt("logiid_fiador"),
+						rs.getString("cpf"), rs.getString("nome"),
+						rs.getString("telefone"), rs.getString("email"),
+						rs.getString("profissao"));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return fiador;
+	
+	}//fim do consultarfiador
+	*/
+	
+
+	public static Fiador excluirFiador(String cpf) {
+		Fiador fiador = null;
+		FiadorDAO fiaDAO = new FiadorDAO();
+
+		try {
+			// Criação do delete
+			String sql = "delete from fiador where cpf = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(fiaDAO.url, fiaDAO.driver,
+					fiaDAO.login, fiaDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1, cpf);
+
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return fiador;
+	}// fim do excluirFiador();
+	
+	
+	public static Fiador alterarFiador( 
+			String cpf, String nome, String telefone, String email,
+			String profissao) { //não coloquei p/ alterar o id pois será auto_increment
+		
+		Fiador fiador = null;
+		FiadorDAO fiaDAO = new FiadorDAO();
+
+		try {
+			// Criação do update
+			String sql = "update fiador set cpf = ?, nome = ?, telefone = ?," +
+				"email = ? , profissao = ? where cpf = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao( fiaDAO.url, fiaDAO .driver,
+					fiaDAO .login, fiaDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+			
+			comando.setString(1, cpf);
+			comando.setString(2, nome);
+			comando.setString(3, telefone);
+			comando.setString(4, email);
+			comando.setString(5, profissao);
+			comando.setString(9, cpf);
+			// Comando executado
+			
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return fiador;
+	}// fim do alterarFiador();
+
+}// fim da classe

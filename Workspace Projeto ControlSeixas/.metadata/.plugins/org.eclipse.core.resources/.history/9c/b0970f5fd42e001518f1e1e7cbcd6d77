@@ -1,0 +1,203 @@
+package model.DAO;
+
+import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import model.Cliente;
+import util.Conexao;
+import util.Configurador;
+
+import java.util.ArrayList;
+
+public class ClienteDAO {
+	Configurador config = new Configurador();
+
+	String url;
+	String driver;
+	String login;
+	String senha;
+
+	public ClienteDAO() {
+
+		url = config.getUrl();
+		driver = config.getDriver();
+		login = config.getLogin();
+		senha = config.getSenha();
+		
+	}//fim do public clienteDAO
+	
+	
+	//Primeiro vem os atributos do Cliente para podermos incluí-lo
+	public static Cliente incluirCliente(String cpf, String nome, String telefone, String email,
+			String estado_civil, int tipo) { //não coloquei p/ inserir o id pois será auto_increment, 
+		 
+		
+		Cliente cliente = null;
+		ClienteDAO cliDAO = new ClienteDAO();
+
+		try {
+			// Criação do insert
+			String sql = "insert into cliente(id_cliente , cpf, nome, telefone, email, estado_civil, tipo, fk_endereco)values"
+					+ "(null, ?, ?, ?, ?, ?, ? , ?);";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(cliDAO.url, cliDAO.driver,
+					cliDAO.login, cliDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+		
+			comando.setString(1, cpf);
+			comando.setString(2, nome);
+			comando.setString(3, telefone);
+			comando.setString(4, email);
+			comando.setString(5, estado_civil);
+			comando.setInt(6, tipo);
+				
+
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		cliente = new Cliente (cpf, nome, telefone, email, estado_civil, tipo);
+		
+		return cliente;
+		
+	}//fim do incluirCliente
+	
+	
+	public static List<Cliente> buscarCliente(String nome, String cpf) {  
+		
+		
+		List<Cliente> cliente = null;
+
+		ClienteDAO cliDAO = new ClienteDAO();
+		try {
+			// Criação do select
+			
+			//PESQUISAR PELO NOME E CPF
+			//Se a pesquisa for pelo nome do cliente será algo assim: select * from cliente where nome = ?
+			String sql = "select * from cliente where (nome = ? or cpf = ?)";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(cliDAO.url, cliDAO.driver,
+					cliDAO.login, cliDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1, nome);
+			comando.setString(2, cpf);
+		
+			ResultSet rs = comando.executeQuery();
+			
+			cliente = new ArrayList<Cliente>();
+
+			while (rs.next()) {
+				cliente.add(new Cliente(rs.getInt("id_cliente"),
+						rs.getString("cpf"), rs.getString("nome"),
+						rs.getString("telefone"), rs.getString("estado_civil"),
+						rs.getString("email"), rs.getInt("tipo")));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return cliente;
+	}
+	
+	
+	public static Cliente excluirCliente(String cpf) { //excluir pelo cpf
+		Cliente cliente = null;
+		ClienteDAO cliDAO = new ClienteDAO();
+
+		try {
+			// Criação do delete
+			String sql = "delete from cliente where cpf = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(cliDAO.url, cliDAO.driver,
+					cliDAO.login, cliDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1,cpf);
+
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return cliente;
+	}// fim do excluirCliente();
+	
+	public static Cliente alterarCliente( 
+			String cpf, String nome, String telefone, String email,
+			String estado_civil, int tipo) { //não coloquei p/ alterar o id pois será auto_increment
+		
+		Cliente cliente = null;
+		ClienteDAO cliDAO = new ClienteDAO();
+
+		try {
+			// Criação do update
+			String sql = "update cliente set cpf = ?, nome = ?, telefone = ?," +
+				"email = ? , estado_civil = ?,tipo = ? where cpf = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(cliDAO.url, cliDAO.driver,
+					cliDAO.login, cliDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+			
+			comando.setString(1, cpf);
+			comando.setString(2, nome);
+			comando.setString(3, telefone);
+			comando.setString(4, email);
+			comando.setString(5, estado_civil);
+			comando.setInt(6, tipo);
+			comando.setString(10, cpf);
+			// Comando executado
+			
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return cliente;
+	}// fim do alterarCliente();
+	
+	
+	
+	//Incluir cliente pros Contratos
+	
+	
+}
+	

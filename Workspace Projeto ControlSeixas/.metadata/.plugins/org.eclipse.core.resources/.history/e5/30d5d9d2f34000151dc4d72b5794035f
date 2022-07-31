@@ -1,0 +1,457 @@
+package gui;
+
+import javax.swing.JFrame;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import model.Endereco;
+import model.DAO.ClienteDAO;
+import model.DAO.EnderecoDAO;
+import model.DAO.FiadorDAO;
+import model.DAO.ProprietarioDAO;
+
+public class Proprietario extends JFrame {
+
+	String cep;
+	private JTextField txtNome;
+	private JTextField txtCpf;
+	private JTextField txtCodigo;
+	private JTextField txtCep;
+	private JTextField txtComplemento;
+	private JTextField txtTelefone;
+	private JTextField txtEmail;
+	private JTextField txtProfissao;
+	private JTextField txtLogradouro;
+	private JTextField txtCidade;
+	private JTextField txtBairro;
+	private JTextField txtEstado;
+
+	public static void main(String[] args) {
+
+		try {
+			new Proprietario();
+			//frame.setVisible(true);
+			//frame.setResizable(false); // não redimensionar
+			//frame.setLocationRelativeTo(null); // abrir ao meio
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+	public Proprietario() {
+		
+		super("Cadastro de Proprietario");
+		// Cor do menu para colocar azul, o plano de fundo
+		getContentPane().setBackground(new Color(135, 206, 250));
+		getContentPane().setFont(new Font("Calibri", Font.PLAIN, 14));
+
+		setTitle("Proprietário");
+		// aqui e DISPOSE_ON_CLOSE para sair so da classe sem sai do menu
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 0, 800, 600);
+		getContentPane().setLayout(null);
+
+		JLabel lblNome = new JLabel("Nome");
+		lblNome.setBounds(187, 82, 46, 17);
+		lblNome.setFont(new Font("Calibri", Font.PLAIN, 18));
+		getContentPane().add(lblNome);
+
+		txtNome = new JTextField();
+		txtNome.setBounds(187, 110, 205, 20);
+		txtNome.setFont(new Font("Calibri", Font.PLAIN, 18));
+		getContentPane().add(txtNome);
+		txtNome.setColumns(10);
+
+		JLabel lblCpf = new JLabel("CPF");
+		lblCpf.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblCpf.setBounds(416, 83, 46, 14);
+		getContentPane().add(lblCpf);
+
+		txtCpf = new JTextField();
+		txtCpf.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtCpf.setColumns(10);
+		txtCpf.setBounds(416, 110, 116, 20);
+		getContentPane().add(txtCpf);
+
+		JLabel lblCodigo = new JLabel("C\u00F3digo");
+		lblCodigo.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblCodigo.setBounds(62, 80, 62, 20);
+		getContentPane().add(lblCodigo);
+
+		txtCodigo = new JTextField();
+		txtCodigo.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtCodigo.setColumns(10);
+		txtCodigo.setBounds(62, 110, 90, 20);
+		getContentPane().add(txtCodigo);
+
+		JLabel lblProfissao = new JLabel("Profissao");
+		lblProfissao.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblProfissao.setBounds(589, 84, 90, 14);
+		getContentPane().add(lblProfissao);
+
+		txtProfissao = new JTextField();
+		txtProfissao.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtProfissao.setColumns(10);
+		txtProfissao.setBounds(589, 110, 146, 20);
+		getContentPane().add(txtProfissao);
+
+		
+
+		JLabel lblTelefone = new JLabel("Telefone");
+		lblTelefone.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblTelefone.setBounds(62, 141, 74, 14);
+		getContentPane().add(lblTelefone);
+
+		txtTelefone = new JTextField();
+		txtTelefone.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtTelefone.setColumns(10);
+		txtTelefone.setBounds(62, 166, 166, 20);
+		getContentPane().add(txtTelefone);
+
+		JLabel lblEmail = new JLabel("E-mail");
+		lblEmail.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblEmail.setBounds(251, 141, 62, 14);
+		getContentPane().add(lblEmail);
+
+		txtEmail = new JTextField();
+		txtEmail.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtEmail.setColumns(10);
+		txtEmail.setBounds(251, 166, 292, 20);
+		getContentPane().add(txtEmail);
+
+		JLabel lblEstadoCivil = new JLabel("Estado Civil");
+		lblEstadoCivil.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblEstadoCivil.setBounds(589, 141, 116, 14);
+		getContentPane().add(lblEstadoCivil);
+
+		JComboBox cbEstadoCivil = new JComboBox(new Object[] { "Solteiro",
+	   "Casado", "Divorciado", "Viúvo",
+	   "Separado", "Companheiro" });//colocar texto no comboBox
+		cbEstadoCivil.setFont(new Font("Calibri", Font.PLAIN, 18));
+		cbEstadoCivil.setBounds(589, 167, 146, 20);
+		getContentPane().add(cbEstadoCivil);
+
+		JLabel lblLogradouro = new JLabel("Logradouro");
+		lblLogradouro.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblLogradouro.setBounds(251, 205, 105, 18);
+		getContentPane().add(lblLogradouro);
+		
+		txtLogradouro = new JTextField();
+		txtLogradouro.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtLogradouro.setEditable(false);
+		txtLogradouro.setColumns(10);
+		txtLogradouro.setBounds(251, 234, 292, 20);
+		getContentPane().add(txtLogradouro);
+		
+		JLabel lblComplemento = new JLabel("Complemento");
+		lblComplemento.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblComplemento.setBounds(589, 207, 110, 14);
+		getContentPane().add(lblComplemento);
+		
+		txtComplemento = new JTextField();
+		txtComplemento.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtComplemento.setColumns(10);
+		txtComplemento.setBounds(589, 234, 150, 20);
+		getContentPane().add(txtComplemento);
+		
+		JLabel lblCep = new JLabel("CEP");
+		lblCep.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblCep.setBounds(62, 207, 46, 14);
+		getContentPane().add(lblCep);
+		
+		txtCep = new JTextField();
+		txtCep.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtCep.setColumns(10);
+		txtCep.setBounds(62, 234, 115, 20);
+		getContentPane().add(txtCep);
+		
+		JLabel lblCidade = new JLabel("Cidade");
+		lblCidade.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblCidade.setBounds(63, 278, 76, 14);
+		getContentPane().add(lblCidade);
+		
+		txtCidade = new JTextField();
+		txtCidade.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtCidade.setEditable(false);
+		txtCidade.setColumns(10);
+		txtCidade.setBounds(62, 303, 204, 20);
+		getContentPane().add(txtCidade);
+		
+		JLabel lblBairro = new JLabel("Bairro");
+		lblBairro.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblBairro.setBounds(305, 278, 46, 14);
+		getContentPane().add(lblBairro);
+		
+		txtBairro = new JTextField();
+		txtBairro.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtBairro.setEditable(false);
+		txtBairro.setColumns(10);
+		txtBairro.setBounds(305, 303, 187, 20);
+		getContentPane().add(txtBairro);
+		
+		JLabel lblEsatdo = new JLabel("Estado");
+		lblEsatdo.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblEsatdo.setBounds(517, 278, 84, 14);
+		getContentPane().add(lblEsatdo);
+		
+		txtEstado = new JTextField();
+		txtEstado.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtEstado.setEditable(false);
+		txtEstado.setColumns(10);
+		txtEstado.setBounds(517, 303, 76, 20);
+		getContentPane().add(txtEstado);
+		
+		JButton btnPesquisarCep = new JButton("");
+		btnPesquisarCep.setIcon(new ImageIcon("img\\magnifier13.png"));
+		btnPesquisarCep.setBounds(187, 234, 33, 20);
+		 btnPesquisarCep.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+				
+					String cep = txtCep.getText().toString();
+					//JOptionPane.showMessageDialog(null, cep);
+					
+					Endereco endereco = EnderecoDAO.buscarEndereco(cep);
+					
+					String logradouro = endereco.getLogradouro();
+					txtLogradouro.setText(logradouro);
+					
+					String bairro = endereco.getBairro();
+					txtBairro.setText(bairro);
+					
+					String cidade = endereco.getCidade();
+					txtCidade.setText(cidade);
+			
+					String estado = endereco.getEstado();
+					txtEstado.setText(estado);
+				
+				}
+			});
+			
+		getContentPane().add(btnPesquisarCep);
+		
+		/*
+		JButton btNovo = new JButton("Novo");
+		// Colocar um texto assim que ele passar em cima debotão
+		btNovo.setToolTipText("Novo Proprietário"); 
+		btNovo.setFont(new Font("Calibri", Font.PLAIN, 13));
+		btNovo.setBounds(125, 480, 89, 23);
+		getContentPane().add(btNovo);
+
+*/
+		JButton btnSalvar = new JButton("Salvar");
+		// Colocar um texto assim que ele passar em cima debotão
+		btnSalvar.setToolTipText("Salvar o Proprietário"); 
+		btnSalvar.setFont(new Font("Calibri", Font.PLAIN, 13));
+		btnSalvar.setBounds(253,  439, 89, 23);
+		btnSalvar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+											
+				
+				int opt1 = JOptionPane.showConfirmDialog(null,
+						"Deseja salvar as alterações? ");
+
+				switch (opt1) {
+
+				case JOptionPane.YES_OPTION:
+					// Se clicar em Sim inclui
+					String cpf_prop = txtCpf.getText();
+									
+					model.Proprietario proprietario = ProprietarioDAO.buscarProprietarioCPF_PROP(cpf_prop);
+					
+					//saber se já possui um cpf cadastrado igual na tabela cliente
+					//VER COM O PROFESSOR
+					if (proprietario == null) {
+						String nome = txtNome.getText();
+						String telefone = txtTelefone.getText();
+						String email = txtEmail.getText();
+						String complemento = txtComplemento.getText();
+						String estado_civil = (String)cbEstadoCivil.getSelectedItem();
+						String profissao =txtProfissao.getText();
+						String cep = txtCep.getText().toString();
+						
+						//aqui e para fazer os campos seres limpos apos salva 
+						  for (int i=0; i < getContentPane().getComponentCount(); i++) {  
+			                    //varre todos os componentes  
+			  
+			                    Component c = getContentPane().getComponent(i);  
+			                   
+			                    if (c instanceof JTextField) {  
+			                        //apaga os valores  
+			                        JTextField field = (JTextField) c;  
+			                        field.setText("");  
+			                        
+			                        
+			                    }//FIM DO IF
+			                }//FIM DO FOR  
+						 ProprietarioDAO.incluirProprietario(cpf_prop, nome, telefone, email, 
+								 estado_civil, profissao, complemento, cep);
+							
+
+					JOptionPane.showMessageDialog(null,"Proprietário salvo com Sucesso! ");
+					
+					
+					
+
+					} else { //se for igual nao pode salvar
+						
+						String nome = txtNome.getText();
+						String telefone = txtTelefone.getText();
+						String email = txtEmail.getText();
+						String complemento = txtComplemento.getText();
+						String estado_civil = (String)cbEstadoCivil.getSelectedItem();
+						String profissao =txtProfissao.getText();
+						String cep = txtCep.getText().toString();
+						
+						//aqui e para faze os campos seres limpos apos salva 
+						for (int i=0; i < getContentPane().getComponentCount(); i++) {  
+		                    //varre todos os componentes  
+		  
+		                    Component c = getContentPane().getComponent(i);  
+		                   
+		                    if (c instanceof JTextField) {  
+		                        //apaga os valores  
+		                        JTextField field = (JTextField) c;  
+		                        field.setText("");  
+		                        
+		                       
+		                    }
+		                }  
+						
+						
+						ProprietarioDAO.alterarProprietario(cpf_prop, nome, telefone, email,
+								estado_civil, profissao, complemento, cep);
+						
+						JOptionPane.showMessageDialog(null,"Proprietário editado com Sucesso! ");
+						
+						
+					}
+					
+					
+					break;
+
+				case JOptionPane.NO_OPTION:
+
+					break;
+
+				}// fim do switch				
+				
+				
+			}
+		});// fim do Action Listener
+
+		
+		
+		getContentPane().add(btnSalvar);
+
+		/*
+		JButton btEditar = new JButton("Editar");
+		// Colocar um texto assim que ele passar em cima debotão
+		btEditar.setToolTipText("Editar o Proprietario"); 
+		btEditar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				String cpf_prop = txtCpf.getText();
+				String nome = txtNome.getText();
+				String telefone = txtTelefone.getText();
+				String email = txtEmail.getText();
+				String complemento = txtComplemento.getText();
+				String estado_civil = (String)cbEstadoCivil.getSelectedItem();
+				String profissao =txtProfissao.getText();
+				String cep = txtCep.getText().toString();
+				
+			
+				ProprietarioDAO.alterarProprietario(cpf_prop, nome, telefone, email,
+						estado_civil, profissao, complemento, cep);
+			}
+		});
+		btEditar.setFont(new Font("Calibri", Font.PLAIN, 13));
+		btEditar.setBounds(415, 480, 89, 23);
+		getContentPane().add(btEditar);
+		*/
+		
+		JButton btnExcluir = new JButton("Excluir");
+		// Colocar um texto assim que ele passar em cima debotão
+		btnExcluir.setToolTipText("Excluir o Proprietário"); 
+		btnExcluir.setFont(new Font("Calibri", Font.PLAIN, 13));
+		btnExcluir.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				String cpf_prop = txtCpf.getText();
+					
+				int opt1 = JOptionPane.showConfirmDialog(null,
+						"Tem certeza que deseja excluir? ");
+				
+				switch (opt1) {
+				
+				case JOptionPane.YES_OPTION:
+					//Se clicar em Sim inclui o imovel
+					
+					// Se clicar em Sim exclui o cliente
+					  for (int i=0; i < getContentPane().getComponentCount(); i++) {  
+		                    //varre todos os componentes  
+		  
+		                    Component c = getContentPane().getComponent(i);  
+		                   
+		                    if (c instanceof JTextField) {  
+		                        //apaga os valores  
+		                        JTextField field = (JTextField) c;  
+		                        field.setText("");  
+		                        
+		                        
+		                    }
+		                }  
+					ProprietarioDAO.excluirProprietario(cpf_prop);
+					
+					JOptionPane.showMessageDialog(null, "Proprietário excluído com Sucesso! ");
+					break;
+
+				case JOptionPane.NO_OPTION:
+				
+					break;
+
+				}// fim do switch
+	
+			}
+		});
+		
+		btnExcluir.setBounds(373, 439, 89, 23);
+		getContentPane().add(btnExcluir);
+
+	
+		/*
+		//imagem de fundo
+		JLabel lblImagem = new JLabel("imagem");
+		lblImagem.setFont(new Font("Calibri", Font.PLAIN, 14));
+		lblImagem.setIcon(new ImageIcon("img\\1 (1).png"));
+		lblImagem.setBounds(0, 0, 1024, 728);
+		getContentPane().add(lblImagem);
+		*/
+		JButton btnPesquisar = new JButton("");
+		btnPesquisar.setBounds(542, 110, 33, 20);
+		getContentPane().add(btnPesquisar);
+		
+	
+		setVisible(true); 
+		setResizable(false);//Fazer que a tela não redimensione
+		setLocationRelativeTo(null);//Fazer que a tela abra no centro
+	}
+}

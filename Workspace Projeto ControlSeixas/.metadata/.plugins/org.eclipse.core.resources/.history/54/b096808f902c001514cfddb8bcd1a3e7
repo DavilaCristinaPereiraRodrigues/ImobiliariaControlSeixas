@@ -1,0 +1,382 @@
+package controller;
+
+import java.util.List;
+
+import model.Cliente;
+import model.Fiador;
+import model.DAO.BairroDAO;
+import model.DAO.CidadeDAO;
+import model.DAO.ClienteDAO;
+import model.DAO.EnderecoDAO;
+import model.DAO.FiadorDAO;
+import model.DAO.ImovelDAO;
+import model.DAO.UfDAO;
+import util.Teclado;
+
+public class Teste {
+
+	private static final int INCLUIRFIADOR = 1;
+
+	private static final int EXCLUIRFIADOR = 2;
+
+	private static final int SAIR = 3;
+
+	private static final int INCLUIRCLIENTE = 4;
+
+	private static final int ALTERARCLIENTE = 5;
+
+	private static final int BUSCARCLIENTE = 6;
+
+	private static final int ALTERARFIADOR = 7;
+
+	private static final int EXCLUIRCLIENTE = 8;
+
+	private static final int INCLUIRIMOVEL = 9;
+
+	private static final int EXCLUIRIMOVEL = 10;
+
+	private static final int ALTERARIMOVEL = 11;
+
+	private static final int SELECIONARUF = 12;
+
+	public static void main(String[] args) {
+
+		Teste teste = new Teste(); // Criando o objeto desta classe, info
+		int opcao = SAIR;
+
+		do { // início de um laço, do...while
+
+			opcao = Teclado.lerInt("Digite sua opção: ");
+
+			switch (opcao) {
+
+			case INCLUIRFIADOR:// chamando o método efetuarLogin
+				teste.incluirFiador();
+				break;
+
+			case EXCLUIRFIADOR:
+				teste.excluirFiador();
+				break;
+
+			case INCLUIRCLIENTE:
+				teste.incluirCliente();
+				break;
+
+			case ALTERARCLIENTE:
+				teste.alterarCliente();
+				break;
+
+			case BUSCARCLIENTE:
+				teste.buscarCliente();
+				break;
+
+			case ALTERARFIADOR:
+				teste.alterarFiador();
+				break;
+
+			case EXCLUIRCLIENTE:
+				teste.excluirCliente();
+				break;
+
+			case INCLUIRIMOVEL:
+				teste.incluirImovel();
+				break;
+
+			case EXCLUIRIMOVEL:
+				teste.excluirImovel();
+				break;
+
+			case ALTERARIMOVEL:
+				teste.alterarImovel();
+				break;
+
+			case SELECIONARUF:
+				teste.selecionarUf();
+				break;
+			case SAIR:
+				System.out.println("Saída do Sistema.");
+				break;
+
+			default:
+				System.out.println("Opção inválida!");
+
+			}// fim do switch
+
+			Teclado.lerTexto("Pressione uma tecla para continuar...");
+		} while (opcao != SAIR);
+
+	}// fim do método main
+
+	public void incluirFiador() {
+
+		System.out.println("==========================================");
+		System.out.println("|    Incluir Fiador   |");
+		System.out.println("==========================================");
+		// int id_fiador = Teclado.lerInt("código" ); //coloquei e não perguntei
+		// ao usuário
+		String cpf = Teclado.lerTexto("cpf: ");
+		String nome = Teclado.lerTexto("Nome: ");
+		String telefone = Teclado.lerTexto("Telefone: ");
+		String email = Teclado.lerTexto("Email: ");
+		String profissao = Teclado.lerTexto("Profissao");
+
+		/*
+		 * Fiador fiador = FiadorDAO.incluirFiador(cpf, nome, telefone, email,
+		 * profissao);
+		 */
+
+		System.out.println("===============================================");
+		System.out.println("|        Fiador cadastrado com sucesso       |");
+		System.out.println("===============================================");
+
+	}// fim do incluirFiador();
+
+	public void excluirFiador() {
+
+		System.out.println("======================================");
+		System.out.println("|   Excluir Fiador |");
+		System.out.println("======================================");
+
+		String cpf = Teclado
+				.lerTexto("Digite o cpf do Fiador a ser excluido: ");
+
+		FiadorDAO.excluirFiador(cpf);
+
+		System.out.println("=========================================");
+		System.out.println("|     Fiador excluído com Sucesso    |");
+		System.out.println("=========================================");
+
+	}// fim do excluirFiador()
+
+	public void alterarFiador() {
+		System.out.println("==============");
+		System.out.println("   Alterar Fiador    ");
+		System.out.println("======================");
+
+		String cpf = Teclado
+				.lerTexto("Digite o cpf do Fiador a ser alterado: ");
+		String nome = Teclado.lerTexto("Nome: ");
+		String telefone = Teclado.lerTexto("Telefone: ");
+		String email = Teclado.lerTexto("Email: ");
+		String profissao = Teclado.lerTexto("Profissao");
+
+		FiadorDAO.alterarFiador(cpf, nome, telefone, email, profissao);
+
+		System.out.println("=====================================");
+		System.out.println("   Fiador atualizado com Sucesso   ");
+		System.out.println("=====================================");
+
+	}
+
+	public void incluirCliente() {
+
+		System.out.println("==========================================");
+		System.out.println("|    Incluir Cliente  |");
+		System.out.println("==========================================");
+		// int id_fiador = Teclado.lerInt("código" ); //coloquei e não perguntei
+		// ao usuário
+		String cpf = Teclado.lerTexto("cpf: ");
+		String nome = Teclado.lerTexto("Nome: ");
+		String telefone = Teclado.lerTexto("Telefone: ");
+		String email = Teclado.lerTexto("Email: ");
+		String estado_civil = Teclado.lerTexto("Estado civil");
+		int tipo = Teclado.lerInt("Tipo (0 ou 1)");
+		
+		System.out.println("****Endereço*****\n");
+		String logradouro = Teclado.lerTexto("Logradouro: ");
+		String numero = Teclado.lerTexto("Número: ");
+		String cep = Teclado.lerTexto("CEP:");
+		
+		String nome_uf = Teclado.lerTexto("UF: ");
+		String nome_cidade = Teclado.lerTexto("CIDADE" );
+		String nome_bairro = Teclado.lerTexto("Bairro");
+		
+
+		//Primeiro vem a UF, CIDADE, BAIRRO Endereço em seguida o Cliente
+		
+		
+		UfDAO.incluirUf(nome_uf);
+		CidadeDAO.incluirCidade(nome_cidade);
+		BairroDAO.incluirBairro(nome_bairro);
+		EnderecoDAO.inserirEndereco(logradouro, numero, cep);
+		ClienteDAO.incluirCliente(cpf, nome, telefone, email, estado_civil, tipo);
+	
+		
+		 Cliente cliente = ClienteDAO.incluirCliente(cpf, nome, telefone, email, estado_civil, tipo);
+		 
+		System.out.println("===============================================");
+		System.out.println("|        Cliente cadastrado com sucesso       |");
+		System.out.println("===============================================");
+
+	}// fim do incluirCliente();
+
+	public void alterarCliente() {
+		System.out.println("===========================================");
+		System.out.println("   Alterar Cliente    ");
+		System.out.println("===========================================");
+
+		String cpf = Teclado
+				.lerTexto("Digite o cpf do Cliente a ser alterado: ");
+		String nome = Teclado.lerTexto("Nome: ");
+		String telefone = Teclado.lerTexto("Telefone: ");
+		String email = Teclado.lerTexto("Email: ");
+		String estado_civil = Teclado.lerTexto("Estado civil");
+		int tipo = Teclado.lerInt("Tipo (0 ou 1)");
+
+		System.out.println("****Endereço*****\n");
+		String logradouro = Teclado.lerTexto("Logradouro: ");
+		String numero = Teclado.lerTexto("Número: ");
+		String cep = Teclado.lerTexto("CEP:");
+
+		EnderecoDAO.alterarEndereco(logradouro, numero, cep);
+		ClienteDAO.alterarCliente(cpf, nome, telefone, email, estado_civil,
+				tipo);
+
+		System.out.println("=====================================");
+		System.out.println("   Cliente atualizado com Sucesso   ");
+		System.out.println("=====================================");
+
+	}
+
+	public void excluirCliente() {
+
+		System.out.println("======================================");
+		System.out.println("|   Excluir Cliente |");
+		System.out.println("======================================");
+
+		String cpf = Teclado
+				.lerTexto("Digite o cpf do Cliente a ser excluido: ");
+
+		ClienteDAO.excluirCliente(cpf);
+
+		System.out.println("=========================================");
+		System.out.println("|     Cliente excluído com Sucesso    |");
+		System.out.println("=========================================");
+
+	}// fim do excluirFiador()
+
+	public void incluirImovel() {
+		System.out.println("====================");
+		System.out.println("|    Incluir Imóvel |");
+		System.out.println("====================");
+		int tp_negocio = Teclado.lerInt("Negócio (0 - locação, 1 - venda)");
+		int tp_pos = Teclado.lerInt("Posição: (0 -  frentes , 1 - fundos)");
+		int tp_status = Teclado
+				.lerInt("Status: (0- livre, 1 - alugado, 2- vendido)");
+		int tp_est = Teclado
+				.lerInt("Estrutura:(0- linear, 1 - duplex, 2- triplex)");
+		int tp_pag = Teclado.lerInt("Pagamento: (0-financiado, 1- quitado)");
+		double valor = Teclado.lerDouble("Valor: ");
+		String referencias = Teclado.lerTexto("Referencias");
+		String descricao = Teclado.lerTexto("Descrição:");
+		double area_total = Teclado.lerDouble("Área total em m²: ");
+		double area_cons = Teclado.lerDouble("Área construída em m²: ");
+		double area_util = Teclado.lerDouble("Área útil em m²: ");
+		int qtd_comodos = Teclado.lerInt("Quantidade de cômodos: ");
+		int qtd_quartos = Teclado.lerInt("Quantidade de quartos)");
+		int vaga_garagem = Teclado.lerInt("Vaga na Garagem");
+		String dt_avaliacao = Teclado
+				.lerTexto("Data de avaliação do imóvel (dd/mm/aaaa)");
+
+		ImovelDAO
+				.incluirImovel(tp_negocio, tp_pos, tp_status, tp_est, tp_pag,
+						valor, referencias, descricao, area_total, area_cons,
+						area_util, qtd_comodos, qtd_quartos, vaga_garagem,
+						dt_avaliacao);
+
+		System.out.println("===============================================");
+		System.out.println("|        Imóvel cadastrado com sucesso       |");
+		System.out.println("===============================================");
+	}// fim do incluirImovel
+
+	public void excluirImovel() {
+
+		System.out.println("=====================");
+		System.out.println("|   Excluir Imóvel  |");
+		System.out.println("=====================");
+
+		int id_imovel = Teclado
+				.lerInt("Digite o id do imóvel que deseja excluir");
+
+		ImovelDAO.excluirImovel(id_imovel);
+
+		System.out.println("=========================================");
+		System.out.println("|     Imóvel excluído com Sucesso    |");
+		System.out.println("=========================================");
+
+	}// fim do excluirImovel()
+
+	public void alterarImovel() {
+		System.out.println("======================");
+		System.out.println("    Alterar Imóvel    ");
+		System.out.println("======================");
+
+		int id_imoveis = Teclado.lerInt("Digite o código do negócio : ");
+		int tp_negocio = Teclado.lerInt("Negócio (0 - locação, 1 - venda)");
+		int tp_pos = Teclado.lerInt("Posição: (0 -  frentes , 1 - fundos)");
+		int tp_status = Teclado
+				.lerInt("Status: (0- livre, 1 - alugado, 2- vendido)");
+		int tp_est = Teclado
+				.lerInt("Estrutura:(0- linear, 1 - duplex, 2- triplex)");
+		int tp_pag = Teclado.lerInt("Pagamento: (0-financiado, 1- quitado)");
+		double valor = Teclado.lerDouble("Valor: ");
+		String referencias = Teclado.lerTexto("Referencias");
+		String descricao = Teclado.lerTexto("Descrição:");
+		double area_total = Teclado.lerDouble("Área total em m²: ");
+		double area_cons = Teclado.lerDouble("Área construída em m²: ");
+		double area_util = Teclado.lerDouble("Área útil em m²: ");
+		int qtd_comodos = Teclado.lerInt("Quantidade de cômodos: ");
+		int qtd_quartos = Teclado.lerInt("Quantidade de quartos)");
+		int vaga_garagem = Teclado.lerInt("Vaga na Garagem:");
+		String dt_avaliacao = Teclado
+				.lerTexto("Data de avaliação do imóvel (dd/mm/aaaa)");
+
+		ImovelDAO.alterarImovel(tp_negocio, tp_pos, tp_status, tp_est, tp_pag,
+				valor, referencias, descricao, area_total, area_cons,
+				area_util, qtd_comodos, qtd_quartos, vaga_garagem,
+				dt_avaliacao, id_imoveis);
+
+		System.out.println("=====================================");
+		System.out.println("  Imóvel atualizado com Sucesso   ");
+		System.out.println("=====================================");
+
+	}
+
+	public void buscarCliente() {
+		System.out.println("======================");
+		System.out.println("    Buscar Clientes    ");
+		System.out.println("======================");
+
+		String nome = Teclado
+				.lerTexto("Digite o nome do cliente que deseja pesquisar:");
+		String cpf = Teclado
+				.lerTexto("Digite o cpf do cliente que deseja pesquisar:");
+
+		List<Cliente> cliente = ClienteDAO.buscarCliente(nome, cpf);
+
+		System.out.println("======================");
+		System.out.println("    Lista de Clientes    ");
+		System.out.println("======================");
+
+		System.out.println(cliente); // EXIBIR O CLIENTE
+
+	}
+
+	public void selecionarUf() {
+		System.out.println("======================");
+		System.out.println("   Selecionar UF   ");
+		System.out.println("======================");
+
+		String nome_uf = Teclado.lerTexto("Digite o nome da uf:");
+
+		UfDAO.ConsultarUf(nome_uf);
+
+		System.out.println("======================");
+		System.out.println("    Lista de UF   ");
+		System.out.println("======================");
+
+		System.out.println(nome_uf); // EXIBIR O CLIENTE
+
+	}
+
+}// fim da classe

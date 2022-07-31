@@ -1,0 +1,100 @@
+package model.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import model.Uf;
+import util.Conexao;
+import util.Configurador;
+
+public class UfDAO {
+	Configurador config = new Configurador();
+	String url;
+	String driver;
+	String login;
+	String senha;
+
+	public UfDAO() {
+
+		url = config.getUrl();
+		driver = config.getDriver();
+		login = config.getLogin();
+		senha = config.getSenha();
+
+	}// fim do public bairroDAO
+
+	public static Uf incluirUf(int id_uf) {
+		Uf uf = null;
+		UfDAO ufDAO = new UfDAO();
+
+		try {
+			// Criação do insert
+			String sql = "INSERT INTO uf (id_uf, nome_uf) VALUES (?,?);"; //ñ é autoincrement porque vem com os campos
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(ufDAO.url, ufDAO.driver,
+					ufDAO.login, ufDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+		
+			comando.setInt(1, id_uf);
+
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		uf = new Uf(id_uf);
+		return uf;
+	}// fim do incluirUf()
+	
+	
+	public static Uf ConsultarUf(String nome_uf) { // prepara para o select *
+		Uf uf = null;
+		UfDAO ufDAO = new UfDAO();
+		
+		try {
+			// Criação do select
+			String sql = "select * from uf where nome_uf = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(ufDAO.url, ufDAO.driver,
+					ufDAO.login, ufDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setString(1, nome_uf);
+		
+
+			ResultSet rs = comando.executeQuery();
+
+			if (rs.next()) {
+				uf = new Uf(rs.getInt("id_uf"),
+						rs.getString("nome"));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return uf;
+	}
+
+
+}//fim da classe

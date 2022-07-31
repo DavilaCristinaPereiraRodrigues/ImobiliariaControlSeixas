@@ -1,0 +1,87 @@
+package view;
+
+
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class CaixaDeTexto2 {
+	
+	static JFrame janela = new JFrame();
+	static String manterTexto = "";
+
+	public static void main(String[] args) {
+		JTextField caixaDeTexto = new JTextField(20);// 20 é a largura
+		caixaDeTexto.setText("Digite algo aqui");
+		caixaDeTexto.setToolTipText("Digita logo !!!");
+		
+
+		//Para deixar o que for digitado tudo em maiúsculo
+		caixaDeTexto.addKeyListener(new KeyListener() {
+			
+		
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				caixaDeTexto.setText(caixaDeTexto.getText().toUpperCase());
+				manterTexto=caixaDeTexto.getText();
+			}
+
+			@Override 
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+				caixaDeTexto.setText(manterTexto);
+				
+			}
+		});
+		
+			
+		JButton botaoExibir = new JButton("Exibir");
+		botaoExibir.addActionListener(new ActionListener() {
+			
+			@Override
+		    public void actionPerformed(ActionEvent e) {
+		        JOptionPane.showMessageDialog(janela, caixaDeTexto.getText());
+		    }
+		});
+
+		JButton botaoLimpar = new JButton("Limpar");
+		botaoLimpar.addActionListener(new ActionListener() {
+			
+			@Override
+		    public void actionPerformed(ActionEvent e) {
+				caixaDeTexto.setText("");
+		    }
+		});
+		
+		
+		JPanel painel = new JPanel();
+		painel.add(caixaDeTexto);
+		painel.add(botaoExibir);
+		painel.add(botaoLimpar);
+
+		janela.add(painel);
+		janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		janela.setSize(300, 100);
+		janela.setVisible(true);
+
+
+	}
+
+}
+

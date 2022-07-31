@@ -1,0 +1,67 @@
+package util;
+
+import java.util.List;
+
+import model.Cliente;
+import model.Imovel;
+
+import javax.swing.table.AbstractTableModel;
+
+import view.PesquisarImovel;
+import model.DAO.ImovelDAO;
+
+public class ImovelTabelaModel extends AbstractTableModel {
+
+	private final List<Imovel> imovel;
+
+	public ImovelTabelaModel(List<Imovel> imovel) {
+		this.imovel = imovel;
+	}
+
+	@Override
+	public int getColumnCount() {
+		// TODO Auto-generated method stub
+		return 2;
+	}
+
+	@Override
+	public int getRowCount() {
+		// TODO Auto-generated method stub
+		return imovel.size();
+	}
+
+	@Override
+	public Object getValueAt(int linha, int coluna) {
+		// TODO Auto-generated method stub
+		Imovel imo = imovel.get(linha);
+
+		switch (coluna) {
+		case 0:
+			return imo.getValor();
+		case 1:
+			return imo.getId_cep();
+		
+
+		default:
+
+			break;
+		}
+
+		return null;
+	}
+
+	@Override
+	public String getColumnName(int column) {
+		switch (column) {
+		case 0:
+			return "Valor";
+		case 1:
+			return "Bairro";
+		case 2:
+			return "Cidade";
+
+		default:
+			return "";
+		}
+	}
+}

@@ -1,0 +1,183 @@
+package model.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import model.Imovel;
+import util.Conexao;
+import util.Configurador;
+
+public class ImovelDAO {
+
+	Configurador config = new Configurador();
+
+	String url;
+	String driver;
+	String login;
+	String senha;
+
+	public ImovelDAO() {
+
+		url = config.getUrl();
+		driver = config.getDriver();
+		login = config.getLogin();
+		senha = config.getSenha();
+
+	}// fim do public ImovelDAO
+	
+	/*
+	 * Na tela com as perguntas para o usuário (Pesquisar Imóveis)
+	 * é preciso validar os campos preenchidos e os campos vazios.
+	 * Os preenchidos devem ficar com os valores que receberam do usuário.
+	 * Os vazios devem receber * para que aqui na consulta ao banco dê certo.
+	 */
+
+	public static Imovel incluirImovel(int tp_negocio, int tp_pos, int tp_status, int tp_est, int tp_pag,
+			double valor, String referencias, String descricao,
+			double area_total, double area_cons, double area_util,
+			int qtd_comodos, int qtd_quartos, int vaga_garagem,
+			String dt_avaliacao) {
+
+		Imovel imovel = null;
+		ImovelDAO imoDAO = new ImovelDAO();
+
+		try {
+			// Criação do insert
+			String sql = "insert into imovel(id_imovel, tp_negocio, tp_pos, tp_status, tp_est,  tp_pag, valor, referencias, descricao, area_total, "
+					+ "area_cons, area_util, qtd_comodos, qtd_quartos, vaga_garagem,"
+					+ "dt_avaliacao,fk_endereco,fk_prop)values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+					+ "?, ?, ?, ?, ?, ?);";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(imoDAO.url, imoDAO.driver,
+					imoDAO.login, imoDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setInt(1, tp_negocio);
+			comando.setInt(2, tp_pos);
+			comando.setInt(3, tp_status);
+			comando.setInt(4, tp_est);
+			comando.setInt(5, tp_pag);
+			comando.setDouble(6, valor);
+			comando.setString(7, referencias);
+			comando.setString(8, descricao);
+			comando.setDouble(9, area_total);
+			comando.setDouble(10, area_cons);
+			comando.setDouble(11, area_util);
+			comando.setInt(12, qtd_comodos);
+			comando.setInt(13, qtd_quartos);
+			comando.setInt(14, vaga_garagem);
+			comando.setString(15, dt_avaliacao);
+
+
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		imovel = new Imovel(tp_negocio, tp_pos, tp_status, tp_est, tp_pag,
+				valor, referencias, descricao, +area_total, area_cons,
+				area_util, qtd_comodos, qtd_quartos, vaga_garagem, dt_avaliacao);
+
+		return imovel;
+
+	}// fim do incluirImovel
+	
+	
+	
+	
+	
+	//Método excluirImovel()
+	public static Imovel excluirImovel(int id_imovel) { //excluir pelo código
+		Imovel imovel = null;
+		ImovelDAO imovelDAO = new ImovelDAO();
+
+		try {
+			// Criação do delete
+			String sql = "delete from imovel where id_imovel = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(imovelDAO.url, imovelDAO.driver,
+					imovelDAO.login, imovelDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setInt(1,id_imovel);
+
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return imovel;
+	}// fim do excluiImovel();
+	
+	public static Imovel alterarImovel( 
+			int tp_negocio, int tp_pos, int tp_status, int tp_est,
+			int tp_pag, double valor, String referencias, String descricao,
+			double area_total, double area_cons, double area_util,
+			int qtd_comodos, int qtd_quartos, int vaga_garagem,
+			String dt_avaliacao, int id_imoveis) { //aqui coloquei p/ alterar pelo id pois ñ tinha oltra indentificação única
+		
+		Imovel imovel = null;
+		ImovelDAO imovelDAO = new ImovelDAO();
+
+
+		try {
+			// Criação do update
+			String sql = "update imovel set id_imovel = ?, tp_negocio = ?,  tp_pos = ? ,  tp_status = ?, tp_est = ?, tp_pag = ?,  valor = ?,"
+					+ "  referencias = ?,  descricao = ?, area_total = ?,  area_cons = ?,  area_util = ?, "
+					+ "qtd_comodos = ?, qtd_quartos, vaga_garagem = ?,  dt_avaliacao = ? where id_imovel = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(imovelDAO.url, imovelDAO.driver,
+					imovelDAO.login, imovelDAO.senha);
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+			
+			comando.setInt(1, tp_negocio);
+			comando.setInt(2, tp_pos);
+			comando.setInt(3, tp_status);
+			comando.setInt(4, tp_est);
+			comando.setInt(5, tp_pag);
+			comando.setDouble(6, valor);
+			comando.setString(7, referencias);
+			comando.setString(8, descricao);
+			comando.setDouble(9, area_total);
+			comando.setDouble(10, area_cons);
+			comando.setDouble(11, area_util);
+			comando.setInt(12, qtd_comodos);
+			comando.setInt(13, qtd_quartos);
+			comando.setInt(14, vaga_garagem);
+			comando.setString(15, dt_avaliacao);
+		
+
+			// Comando executado
+			
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return imovel;
+		
+	}//fim do alteraimovel();
+	
+}//fim da classe

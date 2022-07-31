@@ -1,0 +1,57 @@
+package model.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import model.Cidade;
+import util.Conexao;
+import util.Configurador;
+
+public class CidadeDAO {
+	Configurador config = new Configurador();
+	String url;
+	String driver;
+	String login;
+	String senha;
+
+	public CidadeDAO() {
+
+		url = config.getUrl();
+		driver = config.getDriver();
+		login = config.getLogin();
+		senha = config.getSenha();
+
+	}// fim do public bairroDAO
+
+	public static Cidade incluirCidade(int id_cidade) { //Coloquei o id porque ñ é auto_increment
+		Cidade cidade = null;
+		CidadeDAO cidadeDAO = new CidadeDAO();
+
+		try {
+			// Criação do insert
+			String sql = "INSERT INTO cidade (id_cidade,fk_uf,nome_cidade) VALUES (?,?,?);";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(cidadeDAO.url, cidadeDAO.driver,
+					cidadeDAO.login, cidadeDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+	
+			comando.setInt(1, id_cidade);
+	
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		cidade = new Cidade(id_cidade);
+		return cidade;
+	}// fim do incluirCidade()
+
+	}// fim da classe

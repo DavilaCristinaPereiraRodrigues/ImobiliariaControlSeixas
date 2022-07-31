@@ -1,0 +1,670 @@
+package view;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import model.Endereco;
+import model.Proprietario;
+import model.DAO.ClienteDAO;
+import model.Cliente;
+import model.Corretor;
+import model.DAO.ContratoAluguelDAO;
+import model.DAO.CorretorDAO;
+import model.DAO.FiadorDAO;
+import model.Imovel;
+import model.DAO.ImovelDAO;
+import model.DAO.ProprietarioDAO;
+
+public class ContratoAluguel extends JFrame {
+
+	String cpf_cliente;
+	String cpf_corretor;
+	String cpf_prop;
+	int codigo;
+
+	private JTextField txtValordaComissao;
+	private JTextField txtImovel;
+	private JTextField txtValorDoAluguel;
+	private JTextField txtAquisicao;
+	private JTextField txtDataDoVencimento;
+	private JTextField txtPagamento;
+	private JTextField txtNumero;// número do contrato do aluguel
+	private JTextField txtCliente;
+	private JTextField txtNomeCliente;
+	private JTextField txtCpfProp;
+	private JTextField txtNomeProp;
+	private JTextField txtCpfCor;
+	private JTextField txtNomeCor;
+
+	public static void main(String[] args) {
+
+		try {
+			new ContratoAluguel();
+			// frame.setVisible(true);
+			// frame.setResizable(false);
+			// frame.setLocationRelativeTo(null);//Centraliza a janela na tela
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public ContratoAluguel() {
+
+		// Cor do menu para colocar azul, o plano de fundo
+		getContentPane().setBackground(new Color(135, 206, 250));
+		getContentPane().setFont(new Font("Calibri", Font.PLAIN, 14));
+
+		setTitle("Contratos de Aluguel"); // Colocar o nome da tela
+		// aqui e DISPOSE_ON_CLOSE para sair so da classe sem sai do menu
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 0, 800, 600);
+		getContentPane().setLayout(null);
+
+		JLabel lblCliente = new JLabel("Cliente");
+		lblCliente.setForeground(Color.WHITE);
+		lblCliente.setFont(new Font("Calibri", Font.PLAIN, 20));
+		lblCliente.setBounds(99, 99, 83, 17);
+		getContentPane().add(lblCliente);
+
+		txtCliente = new JTextField();
+		txtCliente.setText("");
+		txtCliente.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtCliente.setColumns(10);
+		txtCliente.setBounds(230, 97, 125, 20);
+		getContentPane().add(txtCliente);
+
+		JLabel lblImovel = new JLabel("Im\u00F3vel");
+		lblImovel.setForeground(Color.WHITE);
+		lblImovel.setFont(new Font("Calibri", Font.PLAIN, 20));
+		lblImovel.setBounds(99, 152, 71, 17);
+		getContentPane().add(lblImovel);
+
+		txtImovel = new JTextField();
+		txtImovel.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtImovel.setText("");
+		txtImovel.setColumns(10);
+		txtImovel.setBounds(229, 150, 126, 20);
+		getContentPane().add(txtImovel);
+
+		JLabel lblValorDaComissao = new JLabel("Comiss\u00E3o");
+		lblValorDaComissao.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblValorDaComissao.setBounds(526, 366, 96, 14);
+		getContentPane().add(lblValorDaComissao);
+
+		txtValordaComissao = new JTextField();
+		txtValordaComissao.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtValordaComissao.setText("");
+		txtValordaComissao.setColumns(10);
+		txtValordaComissao.setBounds(607, 363, 89, 20);
+		getContentPane().add(txtValordaComissao);
+
+		JLabel lblAquisicao = new JLabel("Aquisi\u00E7\u00E3o");
+		lblAquisicao.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblAquisicao.setBounds(307, 392, 83, 23);
+		getContentPane().add(lblAquisicao);
+
+		txtAquisicao = new JTextField();
+		txtAquisicao.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtAquisicao.setText("");
+		txtAquisicao.setColumns(10);
+		txtAquisicao.setBounds(390, 393, 125, 20);
+		getContentPane().add(txtAquisicao);
+
+		JLabel lblVencimento = new JLabel("Vencimento");
+		lblVencimento.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblVencimento.setBounds(292, 426, 104, 14);
+		getContentPane().add(lblVencimento);
+
+		JLabel ValorDoAluguel = new JLabel(" Aluguel");
+		ValorDoAluguel.setFont(new Font("Calibri", Font.PLAIN, 18));
+		ValorDoAluguel.setBounds(526, 394, 83, 19);
+		getContentPane().add(ValorDoAluguel);
+
+		txtValorDoAluguel = new JTextField();
+		txtValorDoAluguel.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtValorDoAluguel.setText("");
+		txtValorDoAluguel.setColumns(10);
+		txtValorDoAluguel.setBounds(607, 393, 93, 20);
+		getContentPane().add(txtValorDoAluguel);
+
+		JLabel lblPagamento = new JLabel("Pagar at\u00E9 ");
+		lblPagamento.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblPagamento.setBounds(307, 356, 83, 25);
+		getContentPane().add(lblPagamento);
+
+		txtPagamento = new JTextField();
+		txtPagamento.setBounds(388, 362, 83, 20);
+		getContentPane().add(txtPagamento);
+		txtPagamento.setColumns(10);
+
+		txtDataDoVencimento = new JTextField();
+		txtDataDoVencimento.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtDataDoVencimento.setText("");
+		txtDataDoVencimento.setColumns(10);
+		txtDataDoVencimento.setBounds(390, 424, 125, 20);
+		getContentPane().add(txtDataDoVencimento);
+
+		JLabel lblNumero = new JLabel("N\u00FAmero do Contrato");
+		lblNumero.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblNumero.setBounds(99, 366, 156, 14);
+		getContentPane().add(lblNumero);
+
+		txtNumero = new JTextField();
+		txtNumero.setText("");
+		txtNumero.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtNumero.setColumns(10);
+		txtNumero.setBounds(99, 391, 96, 20);
+		getContentPane().add(txtNumero);
+
+		JButton btnNovo = new JButton("Novo");
+		btnNovo.setFont(new Font("Calibri", Font.PLAIN, 16));
+
+		btnNovo.setBounds(163, 515, 89, 23);
+		getContentPane().add(btnNovo);
+
+		JButton btnSalvar = new JButton("Salvar");
+		btnSalvar.setFont(new Font("Calibri", Font.PLAIN, 14));
+		btnSalvar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				int num_contAluguel = (Integer.parseInt(txtNumero.getText()));
+				String dt_aquisicao = txtAquisicao.getText();
+				double valor = (Double.parseDouble(txtValorDoAluguel.getText())); // convertendo
+																					// para
+																					// double
+				double comissao_cor = (Double.parseDouble(txtValordaComissao
+						.getText())); // convertendo para double
+				String dt_vencimento = txtDataDoVencimento.getText();
+				String dt_pag = txtPagamento.getText();
+				String cpf_cliente = txtCliente.getText();
+				String cpf_prop = txtCpfProp.getText();
+				String cpf_corretor = txtCpfCor.getText();
+				int codigo = (Integer.parseInt(txtImovel.getText())); // imóvel
+
+				ContratoAluguelDAO.incluirAluguel(num_contAluguel,
+						dt_aquisicao, dt_vencimento, dt_pag, valor,
+						comissao_cor, cpf_cliente, codigo, cpf_corretor,
+						cpf_prop);
+
+			}
+		});// fim do Action Listener
+
+		btnSalvar.setBounds(297, 515, 89, 23);
+		getContentPane().add(btnSalvar);
+
+		// BOTÃO DE EDITAR
+		JButton btnEditar = new JButton("Editar");
+		btnEditar.setFont(new Font("Calibri", Font.PLAIN, 16));
+		btnEditar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				int num_contAluguel = (Integer.parseInt(txtNumero.getText()));
+				String dt_aquisicao = txtAquisicao.getText();
+				double valor = (Double.parseDouble(txtValorDoAluguel.getText())); // convertendo
+																					// para
+																					// double
+				double comissao_cor = (Double.parseDouble(txtValordaComissao
+						.getText())); // convertendo para double
+				String dt_vencimento = txtDataDoVencimento.getText();
+				String dt_pag = txtPagamento.getText();
+				String cpf_cliente = txtCliente.getText();
+				String cpf_prop = txtCpfProp.getText();
+				String cpf_corretor = txtCpfCor.getText();
+				int codigo = (Integer.parseInt(txtImovel.getText())); // imóvel
+
+				ContratoAluguelDAO.alterarContratoAluguel(num_contAluguel,
+						dt_aquisicao, dt_vencimento, dt_pag, valor,
+						comissao_cor, cpf_cliente, codigo, cpf_corretor,
+						cpf_prop);
+			}
+		});
+
+		btnEditar.setBounds(419, 515, 89, 23);
+		getContentPane().add(btnEditar);
+
+		// Botão de Excluir
+		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir.setFont(new Font("Calibri", Font.PLAIN, 16));
+		btnExcluir.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				int num_contAluguel = (Integer.parseInt(txtNumero.getText()));
+
+				ContratoAluguelDAO.excluirAluguel(num_contAluguel);
+			}
+		});
+		btnExcluir.setBounds(539, 515, 89, 23);
+		getContentPane().add(btnExcluir);
+
+		// Botão para buscar o cpf do cliente
+		JButton btnPesquisarCliente = new JButton("");
+		btnPesquisarCliente.setIcon(new ImageIcon("img\\magnifier13.png"));
+		btnPesquisarCliente.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				String cpf_cliente = txtCliente.getText();
+
+				Cliente cliente = ClienteDAO.buscarClienteCpf(cpf_cliente); // NÃO
+																			// ESQUECER
+																			// DE
+																			// DAR
+																			// UM
+																			// IMPORT
+																			// NO
+																			// CLIENTE
+																			// DO
+																			// MODEL
+
+				// Verificar se o cliente existe no Banco de Dados e vem com
+				// os dados completo do cliente id, nome, telefone
+				if (cliente == null) {
+
+					JOptionPane.showMessageDialog(null,
+							"Cliente não cadastrado");
+
+				} else {
+					/*
+					 * JOptionPane.showMessageDialog(null,
+					 * "Dados do cliente \n " + cliente);//está pegando //o
+					 * método toString no model Cliente e jogando neste
+					 * showMessage
+					 */
+
+					int opt2 = JOptionPane.showConfirmDialog(null,
+							"Dados do cliente\n " + cliente, "Cliente",
+							JOptionPane.OK_CANCEL_OPTION); // o método toString
+															// no model Cliente
+															// e jogando neste
+															// showMessage
+
+					switch (opt2) {
+					case JOptionPane.CANCEL_OPTION:
+						JOptionPane.showMessageDialog(null,
+								"Você clicou em \"Cancelar\"");
+						break;
+
+					case JOptionPane.OK_OPTION:
+						JOptionPane.showMessageDialog(null,
+								"Dados inseridos com Sucesso");
+						// Se clicar em OK joga o cliente na tela salvando-o
+						String nome = cliente.getNome();
+
+						txtNomeCliente.setText(nome);
+						break;
+
+					default:
+						JOptionPane.showMessageDialog(null,
+								"Você fechou a janela");
+						break;
+					}// fim do switch
+
+				}
+
+			}
+		});
+
+		btnPesquisarCliente.setBounds(365, 97, 33, 20);
+		getContentPane().add(btnPesquisarCliente);
+
+		JLabel lblCpfCli = new JLabel("CPF");
+		lblCpfCli.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblCpfCli.setBounds(230, 72, 46, 14);
+		getContentPane().add(lblCpfCli);
+
+		JLabel lblNomeCli = new JLabel("Nome");
+		lblNomeCli.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblNomeCli.setBounds(429, 70, 46, 14);
+		getContentPane().add(lblNomeCli);
+
+		txtNomeCliente = new JTextField();
+		txtNomeCliente.setBounds(429, 96, 206, 20);
+		txtNomeCliente.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtNomeCliente.setEditable(false);
+		getContentPane().add(txtNomeCliente);
+		txtNomeCliente.setColumns(10);
+
+		JButton btnPesquisarImovel = new JButton("");
+		btnPesquisarImovel.setIcon(new ImageIcon("img\\magnifier13.png"));
+		btnPesquisarImovel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				int codigo = (Integer.parseInt(txtImovel.getText())); // código
+																		// do
+																		// imovel
+
+				Imovel imovel = ImovelDAO.buscarImovelCodigo(codigo);
+
+				// Verificar se o código existe no Banco de Dados
+				if (imovel == null) {
+
+					JOptionPane.showMessageDialog(null,
+							"Código de imóvel não existente");
+
+				} else {
+					JOptionPane.showMessageDialog(null, "Código de imóvel: "
+							+ codigo);
+
+				}
+
+			}
+		});
+
+		btnPesquisarImovel.setBounds(365, 148, 33, 20);
+		getContentPane().add(btnPesquisarImovel);
+
+		JLabel lblCodigoImovel = new JLabel("C\u00F3digo");
+		lblCodigoImovel.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblCodigoImovel.setBounds(229, 125, 104, 25);
+		getContentPane().add(lblCodigoImovel);
+
+		JLabel lblProprietrio = new JLabel("Propriet\u00E1rio");
+		lblProprietrio.setForeground(Color.WHITE);
+		lblProprietrio.setFont(new Font("Calibri", Font.PLAIN, 20));
+		lblProprietrio.setBounds(99, 213, 119, 17);
+		getContentPane().add(lblProprietrio);
+
+		JLabel lblCpf = new JLabel("CPF");
+		lblCpf.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblCpf.setBounds(233, 184, 46, 14);
+		getContentPane().add(lblCpf);
+
+		txtCpfProp = new JTextField();
+		txtCpfProp.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtCpfProp.setBounds(229, 210, 126, 20);
+		getContentPane().add(txtCpfProp);
+		txtCpfProp.setColumns(10);
+
+		JButton btnPesquisarCpfProp = new JButton("");
+		btnPesquisarCpfProp.setIcon(new ImageIcon("img\\magnifier13.png"));
+		btnPesquisarCpfProp.setBounds(365, 210, 33, 20);
+		btnPesquisarCpfProp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				String cpf_prop = txtCpfProp.getText();
+
+				Proprietario proprietario = ProprietarioDAO
+						.buscarProprietarioCPF_PROP(cpf_prop); // NÃO ESQUECER
+																// DE DAR UM
+																// IMPORT NO
+																// CLIENTE DO
+																// MODEL
+
+				// Verificar se o cliente existe no Banco de Dados e vem com
+				// os dados completo do cliente id, nome, telefone
+				if (proprietario == null) {
+
+					JOptionPane.showMessageDialog(null,
+							"Cliente não cadastrado");
+
+				} else {
+					/*
+					 * JOptionPane.showMessageDialog(null,
+					 * "Dados do cliente \n " + cliente);//está pegando //o
+					 * método toString no model Cliente e jogando neste
+					 * showMessage
+					 */
+
+					int opt2 = JOptionPane.showConfirmDialog(null,
+							"Dados do proprietário\n " + proprietario,
+							"Proprietário", JOptionPane.OK_CANCEL_OPTION); // o
+																			// método
+																			// toString
+																			// no
+																			// model
+																			// Cliente
+																			// e
+																			// jogando
+																			// neste
+																			// showMessage
+
+					switch (opt2) {
+					case JOptionPane.CANCEL_OPTION:
+						JOptionPane.showMessageDialog(null,
+								"Você clicou em \"Cancelar\"");
+						break;
+
+					case JOptionPane.OK_OPTION:
+						JOptionPane.showMessageDialog(null,
+								"Dados inseridos com Sucesso");
+						// Se clicar em OK joga o os dados do proprietário na
+						// tela salvando-o
+
+						String nome = proprietario.getNome();
+
+						txtNomeProp.setText(nome);
+						break;
+
+					default:
+						JOptionPane.showMessageDialog(null,
+								"Você fechou a janela");
+						break;
+					}// fim do switch
+
+				}
+			}
+		});
+		getContentPane().add(btnPesquisarCpfProp);
+
+		JLabel lblNomeProp = new JLabel("Nome");
+		lblNomeProp.setFont(new Font("Calibri", Font.PLAIN, 18));
+		lblNomeProp.setBounds(429, 184, 46, 14);
+		getContentPane().add(lblNomeProp);
+
+		txtNomeProp = new JTextField();
+		txtNomeProp.setEditable(false);
+		txtNomeProp.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtNomeProp.setColumns(10);
+		txtNomeProp.setBounds(429, 212, 206, 20);
+		getContentPane().add(txtNomeProp);
+
+		JLabel lblCorretor_1 = new JLabel("Corretor");
+		lblCorretor_1.setForeground(Color.WHITE);
+		lblCorretor_1.setFont(new Font("Calibri", Font.PLAIN, 20));
+		lblCorretor_1.setBounds(99, 266, 83, 17);
+		getContentPane().add(lblCorretor_1);
+
+		JLabel label = new JLabel("CPF");
+		label.setFont(new Font("Calibri", Font.PLAIN, 18));
+		label.setBounds(230, 244, 46, 14);
+		getContentPane().add(label);
+
+		txtCpfCor = new JTextField();
+		txtCpfCor.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtCpfCor.setColumns(10);
+		txtCpfCor.setBounds(226, 270, 126, 20);
+		getContentPane().add(txtCpfCor);
+
+		JButton btnPesquisarCor = new JButton("");
+		btnPesquisarCor.setIcon(new ImageIcon("img\\magnifier13.png"));
+		btnPesquisarCor.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				String cpf_corretor = txtCpfCor.getText();
+
+				Corretor corretor = CorretorDAO.buscarCorretorCpf(cpf_corretor); // NÃO
+																					// ESQUECER
+																					// DE
+				// Verificar se o cliente existe no Banco de Dados e vem com
+				// os dados completo do cliente id, nome, telefone
+				if (corretor == null) {
+
+					JOptionPane.showMessageDialog(null,
+							"Corretor não cadastrado");
+
+				} else {
+					/*
+					 * JOptionPane.showMessageDialog(null,
+					 * "Dados do cliente \n " + cliente);//está pegando //o
+					 * método toString no model Cliente e jogando neste
+					 * showMessage
+					 */
+
+					int opt2 = JOptionPane.showConfirmDialog(null,
+							"Dados do corretor\n " + corretor, "Corretor",
+							JOptionPane.OK_CANCEL_OPTION); // o método toString
+															// no model Cliente
+															// e jogando neste
+															// showMessage
+
+					switch (opt2) {
+					case JOptionPane.CANCEL_OPTION:
+						JOptionPane.showMessageDialog(null,
+								"Você clicou em \"Cancelar\"");
+						break;
+
+					case JOptionPane.OK_OPTION:
+						JOptionPane.showMessageDialog(null,
+								"Dados inseridos com Sucesso");
+						// Se clicar em OK joga o os dados do proprietário na
+						// tela salvando-o
+
+						// DO
+						// MODEL
+						String nome = corretor.getNome();
+
+						txtNomeCor.setText(nome);
+						break;
+
+					default:
+						JOptionPane.showMessageDialog(null,
+								"Você fechou a janela");
+						break;
+					}// fim do switch
+
+				}
+			}
+		}); // DAR
+
+		btnPesquisarCor.setBounds(365, 270, 33, 20);
+		getContentPane().add(btnPesquisarCor);
+
+		txtNomeCor = new JTextField();
+		txtNomeCor.setColumns(10);
+		txtNomeCor.setEditable(false); // não editar o usuário
+		txtNomeCor.setFont(new Font("Calibri", Font.PLAIN, 18));
+		txtNomeCor.setBounds(426, 272, 206, 20);
+		getContentPane().add(txtNomeCor);
+
+		JLabel label_1 = new JLabel("Nome");
+		label_1.setFont(new Font("Calibri", Font.PLAIN, 18));
+		label_1.setBounds(426, 244, 46, 14);
+		getContentPane().add(label_1);
+
+		JLabel lblData = new JLabel("Datas");
+		lblData.setForeground(Color.WHITE);
+		lblData.setFont(new Font("Calibri", Font.PLAIN, 20));
+		lblData.setBounds(363, 318, 83, 17);
+		getContentPane().add(lblData);
+
+		JLabel lblValor = new JLabel("Valor");
+		lblValor.setForeground(Color.WHITE);
+		lblValor.setFont(new Font("Calibri", Font.PLAIN, 20));
+		lblValor.setBounds(581, 318, 83, 17);
+		getContentPane().add(lblValor);
+
+		
+		//Pesquisar Número do Contrato
+		JButton btnPesqNum = new JButton("");
+		btnPesqNum.setBounds(206, 392, 33, 20);
+		btnPesqNum.setIcon(new ImageIcon("img\\magnifier13.png"));
+		btnPesqNum.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				int num_contAluguel = (Integer.parseInt(txtNumero.getText()));
+				
+				model.ContratoAluguel contAluguelmd = ContratoAluguelDAO .buscarContratoAlu(num_contAluguel);
+				
+				if (contAluguelmd != null) {
+					
+					String dt_aquisicao = contAluguelmd.getDt_aquisicao();
+					txtAquisicao.setText(dt_aquisicao);
+					
+					String dt_vencimento = contAluguelmd.getDt_vencimento();
+					txtDataDoVencimento.setText(dt_vencimento);
+					
+					String dt_pag = contAluguelmd.getDt_pag();
+					txtPagamento.setText(dt_pag);
+					
+					
+					double valor = contAluguelmd.getValor(); // convertendo
+					txtValorDoAluguel.setText(String.valueOf(valor));
+					
+					double comissao_cor = contAluguelmd.getValor(); // convertendo
+					txtValordaComissao.setText(String.valueOf(comissao_cor));
+					
+					int fk_cliente = contAluguelmd.getFk_cliente();
+					int fk_imovel = contAluguelmd.getFk_imovel();
+					int fk_corretor = contAluguelmd.getFk_corretor();
+					int fk_prop = contAluguelmd.getFk_prop();
+					
+					//Cliente
+					Cliente cliente = ClienteDAO.buscarClienteCpf(cpf_cliente);
+					
+					String cpf_cliente = cliente.getCpf_cliente();
+					txtCliente.setText(cpf_cliente); //cpf
+					
+					String nome = cliente.getNome();
+					txtNomeCliente.setText(nome);
+					
+					//Prop
+	Proprietario proprietario = ProprietarioDAO.buscarProprietarioCPF_PROP(cpf_prop);
+					
+					String cpf_prop = proprietario.getCpf_prop();
+					txtCpfProp.setText(cpf_prop); //cpf
+					
+					String nome_prop = proprietario.getNome();
+					txtNomeProp.setText(nome_prop);
+					
+					//Imovel
+					Imovel imovel = ImovelDAO.buscarImovelCodigo(codigo);
+					
+					int codigo = imovel.getCodigo();
+					txtImovel.setText(String.valueOf(codigo));
+					
+					//Corretor
+					Corretor corretor = CorretorDAO.buscarCorretorCpf(cpf_corretor);
+					
+					String cpf_corretor = corretor.getCpf_corretor();
+					txtCpfCor.setText(cpf_corretor); //cpf
+					
+					String nome_cor = corretor.getNome();
+					txtNomeCor.setText(nome_cor);
+					
+					
+				}//fim do if
+				
+			
+
+			}//fim do actionPerfomed
+			
+		});
+		getContentPane().add(btnPesqNum);
+		
+		setVisible(true);
+		setResizable(false);// Fazer que a tela não redimensione
+		setLocationRelativeTo(null);// Fazer que a tela abra no centro
+	}
+}
+}
+

@@ -1,0 +1,406 @@
+package model.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import model.ContratoAluguel;
+import util.Conexao;
+import util.Configurador;
+
+public class ContratoAluguelDAO {
+	Configurador config = new Configurador();
+	String url;
+	String driver;
+	String login;
+	String senha;
+
+	public ContratoAluguelDAO() {
+
+		url = config.getUrl();
+		driver = config.getDriver();
+		login = config.getLogin();
+		senha = config.getSenha();
+
+	}// fim do public bairroDAO
+
+	public static ContratoAluguel incluirAluguel(int num_contAluguel, String dt_aquisicao,
+			String dt_vencimento, String dt_pag, double valor,
+			double comissao_cor, String cpf_cliente, int codigo, String cpf_corretor, String cpf_prop) {
+		
+		ContratoAluguel contAluguel = null;
+		ContratoAluguelDAO contAluguelDAO = new ContratoAluguelDAO();
+
+		try {
+			// Criação do insert
+		
+			String sql = "insert into contrato_aluguel (id_contAluguel, num_contAluguel, dt_aquisicao, "
+					+ "dt_vencimento, dt_pag, valor, comissao_cor, fk_cliente, "
+					+ "fk_imovel, fk_corretor, fk_prop) values"
+					+ "(null, ?, ?, ?, ?, ?, ?, (select id_cliente from cliente where cpf_cliente = ?),"
+					+ " (select id_imovel from imovel where codigo = ? ),"
+					+ " (select id_corretor from corretor where cpf_corretor = ?), "
+					+ " (select id_prop from proprietario where cpf_prop = ? ))"; 
+			
+			
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(contAluguelDAO.url,contAluguelDAO.driver,
+					contAluguelDAO.login,contAluguelDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+		
+			comando.setInt(1, num_contAluguel);
+			comando.setString(2, dt_aquisicao);
+			comando.setString(3, dt_vencimento);
+			comando.setString(4, dt_pag);
+			comando.setDouble(5, valor);
+			comando.setDouble(6, comissao_cor);
+			comando.setString(7, cpf_cliente);
+			comando.setInt(8, codigo); //Imóvel a ser alugado
+			comando.setString(9, cpf_corretor);
+			comando.setString(10, cpf_prop);
+		
+
+			// Comando executado
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		contAluguel = new ContratoAluguel(num_contAluguel, dt_aquisicao, dt_vencimento, dt_pag, valor ,comissao_cor);
+		
+		return contAluguel;
+		
+	}// fim do incluirAluguel()
+	
+	// Excluir pelo Código do Contrato
+	public static ContratoAluguel excluirAluguel(int num_contAluguel) {
+		
+		 ContratoAluguel contAluguel = null;
+		 ContratoAluguelDAO contAluguelDAO = new ContratoAluguelDAO();
+
+		try {
+						
+			String sql = "insert into morto_contratoaluguel (select id_contAluguel, num_contAluguel, dt_aquisicao, "
+					+ "dt_vencimento, dt_pag, valor, comissao_cor, fk_cliente, "
+					+ "fk_imovel, fk_corretor, fk_prop from contrato_aluguel where num_contAluguel = ?) ";
+			
+			// Criação do delete
+			String sql1 = "delete from contrato_aluguel where num_contAluguel = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(contAluguelDAO.url,contAluguelDAO.driver,
+					contAluguelDAO.login,contAluguelDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+			Connection con1 = conex.obterConexao();
+			
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+			PreparedStatement comando1 = con1.prepareStatement(sql1);
+			
+			comando.setInt(1,num_contAluguel );
+			comando1.setInt(1,num_contAluguel );
+			
+			// Comando executado
+			comando.executeUpdate();
+			comando1.executeUpdate();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return contAluguel;
+	}// fim do excluirAluguel();
+	
+	public static ContratoAluguel alterarContratoAluguel( 
+			int num_contAluguel, String dt_aquisicao,
+			String dt_vencimento, String dt_pag, double valor,
+			double comissao_cor, String cpf_cliente, int codigo,
+			String cpf_corretor, String cpf_prop) { //aqui coloquei p/ alterar pelo id pois ñ tinha oltra indentificação única
+		
+		 ContratoAluguel contAluguel = null;
+		 ContratoAluguelDAO contAluguelDAO = new ContratoAluguelDAO();
+		try {
+			// Criação do update
+			String sql = "update contrato_aluguel set num_contAluguel = ? , dt_aquisicao = ?, dt_vencimento = ?,  "
+					+ "dt_pag = ?,  valor = ?, comissao_cor = ?, "
+					+ "fk_cliente = (select id_cliente from cliente where cpf = ? ), "
+					+ "fk_imovel = (select id_imovel from imovel where codigo = ? ), "
+					+ "fk_corretor = (select id_corretor from corretor where cpf_corretor = ? ), "
+					+ "fk_prop = (select id_prop from proprietario where cpf_prop = ? ) "
+					+ "where num_contAluguel = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(contAluguelDAO.url,contAluguelDAO.driver,
+					contAluguelDAO.login,contAluguelDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+			
+			comando.setInt(1, num_contAluguel);
+			comando.setString(2, dt_aquisicao);
+			comando.setString(3, dt_vencimento);
+			comando.setString(4, dt_pag);
+			comando.setDouble(5, valor);
+			comando.setDouble(6, comissao_cor);
+			comando.setString(7, cpf_cliente);
+			comando.setInt(8, codigo); //código do imóvel
+			comando.setString(9, cpf_corretor);
+			comando.setString(10, cpf_prop);
+			comando.setInt(11, num_contAluguel);
+			
+			// Comando executado
+			
+			comando.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return contAluguel;
+	}// fim do alterarContratoAluguel();
+	
+	public static ContratoAluguel buscarContratoAlu(int num_contAluguel) {
+
+		ContratoAluguel contAluguel = null;
+		 ContratoAluguelDAO contAluguelDAO = new ContratoAluguelDAO();
+		try {
+			// Criação do select
+
+			// PESQUISAR PELO ID E DT_AVALIACAO
+
+			String sql = "select * from contrato_aluguel where num_contAluguel = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(contAluguelDAO.url,contAluguelDAO.driver,
+					contAluguelDAO.login,contAluguelDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setInt(1, num_contAluguel);
+
+			ResultSet rs = comando.executeQuery();
+
+		
+
+			if(rs.next()) {
+				contAluguel = new ContratoAluguel(rs.getInt("id_contAluguel"), rs.getInt("num_contAluguel"),rs
+						.getString("dt_aquisicao"), rs.getString("dt_vencimento"), rs
+						.getString("dt_pag"),  rs.getDouble("valor"), rs.getDouble
+						("comissao"), rs.getInt("fk_cliente"), rs.getInt("fk_imovel"), rs.getInt("fk_corretor"),
+						rs.getInt("fk_prop"));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+
+		return contAluguel;
+	}// fim do buscarContrato
+	
+	
+	
+	//Buscar contrato Cliente
+	
+	
+	public static ContratoAluguel buscarContratoCli(int fk_cliente) {
+
+		ContratoAluguel contAluguel = null;
+		 ContratoAluguelDAO contAluguelDAO = new ContratoAluguelDAO();
+		try {
+			// Criação do select
+
+			// PESQUISAR PELO ID E DT_AVALIACAO
+
+			String sql = "select * from contrato_aluguel where fk_cliente = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(contAluguelDAO.url,contAluguelDAO.driver,
+					contAluguelDAO.login,contAluguelDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setInt(1, fk_cliente);
+
+			ResultSet rs = comando.executeQuery();
+
+		
+
+			if(rs.next()) {
+				contAluguel = new ContratoAluguel(rs.getInt("id_contAluguel"), rs.getInt("num_contAluguel"),rs
+						.getString("dt_aquisicao"), rs.getString("dt_vencimento"), rs
+						.getString("dt_pag"),  rs.getDouble("valor"), rs.getDouble
+						("comissao"), rs.getInt("fk_cliente"), rs.getInt("fk_imovel"), rs.getInt("fk_corretor"),
+						rs.getInt("fk_prop"));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+	}
+	
+	
+	public static ContratoAluguel buscarContratoImovel(int fk_imovel) {
+
+		ContratoAluguel contAluguel = null;
+		 ContratoAluguelDAO contAluguelDAO = new ContratoAluguelDAO();
+		try {
+			// Criação do select
+
+			// PESQUISAR PELO ID E DT_AVALIACAO
+
+			String sql = "select * from contrato_aluguel where fk_imovel = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(contAluguelDAO.url,contAluguelDAO.driver,
+					contAluguelDAO.login,contAluguelDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setInt(1, fk_imovel);
+
+			ResultSet rs = comando.executeQuery();
+
+		
+
+			if(rs.next()) {
+				contAluguel = new ContratoAluguel(rs.getInt("id_contAluguel"), rs.getInt("num_contAluguel"),rs
+						.getString("dt_aquisicao"), rs.getString("dt_vencimento"), rs
+						.getString("dt_pag"),  rs.getDouble("valor"), rs.getDouble
+						("comissao"), rs.getInt("fk_cliente"), rs.getInt("fk_imovel"), rs.getInt("fk_corretor"),
+						rs.getInt("fk_prop"));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+	}
+	
+	public static ContratoAluguel buscarContratoCorretor(int fk_corretor) {
+
+		ContratoAluguel contAluguel = null;
+		 ContratoAluguelDAO contAluguelDAO = new ContratoAluguelDAO();
+		try {
+			// Criação do select
+
+			// PESQUISAR PELO ID E DT_AVALIACAO
+
+			String sql = "select * from contrato_aluguel where fk_corretor = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(contAluguelDAO.url,contAluguelDAO.driver,
+					contAluguelDAO.login,contAluguelDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setInt(1, fk_corretor);
+
+			ResultSet rs = comando.executeQuery();
+
+		
+
+			if(rs.next()) {
+				contAluguel = new ContratoAluguel(rs.getInt("id_contAluguel"), rs.getInt("num_contAluguel"),rs
+						.getString("dt_aquisicao"), rs.getString("dt_vencimento"), rs
+						.getString("dt_pag"),  rs.getDouble("valor"), rs.getDouble
+						("comissao"), rs.getInt("fk_cliente"), rs.getInt("fk_imovel"), rs.getInt("fk_corretor"),
+						rs.getInt("fk_prop"));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+	}
+	
+	public static ContratoAluguel buscarContratoAluProp(int fk_prop) {
+
+		ContratoAluguel contAluguel = null;
+		 ContratoAluguelDAO contAluguelDAO = new ContratoAluguelDAO();
+		try {
+			// Criação do select
+
+			// PESQUISAR PELO ID E DT_AVALIACAO
+
+			String sql = "select * from contrato_aluguel where fk_prop = ?";
+
+			// Obter a conexão com o BD
+			Conexao conex = new Conexao(contAluguelDAO.url,contAluguelDAO.driver,
+					contAluguelDAO.login,contAluguelDAO.senha);
+
+			// Abrir a conexao
+			Connection con = conex.obterConexao();
+
+			// Preparar o comando para ser executado
+			PreparedStatement comando = con.prepareStatement(sql);
+
+			comando.setInt(1, fk_prop);
+
+			ResultSet rs = comando.executeQuery();
+
+		
+
+			if(rs.next()) {
+				contAluguel = new ContratoAluguel(rs.getInt("id_contAluguel"), rs.getInt("num_contAluguel"),rs
+						.getString("dt_aquisicao"), rs.getString("dt_vencimento"), rs
+						.getString("dt_pag"),  rs.getDouble("valor"), rs.getDouble
+						("comissao"), rs.getInt("fk_cliente"), rs.getInt("fk_imovel"), rs.getInt("fk_corretor"),
+						rs.getInt("fk_prop"));
+			}
+
+			rs.close();
+			comando.close();
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+
+
+}
